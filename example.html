@@ -1,0 +1,31 @@
+<head>
+  <script src='dist/KeyHolder.js'></script>
+  <script src='libs/jquery.min.js'></script>
+  <script>
+    $(document).ready(function(){
+     var phonefn = function(){
+        alert('Congrats, you pressed cmd+b+a in the phone field.');
+      }
+      var windowfn = function(){
+        alert('Congrats! You pressed shift 1 somewhere in the window.'):
+      }
+
+      var phone = $('#phone')[0];
+
+      var arr = ['meta','b','a'];
+      var arr2 = ['shift','1'];
+
+      new KeyHolder(arr, 'phonefn', phone);
+      new KeyHolder(arr2, 'balls', window);
+    });
+  </script>
+</head>
+
+<h3> KEYHOLDER </h3>
+<label for='phone'>Phone field</label>
+<input id='phone' />
+
+<p> This page has keyboard shortcuts via the KeyHolder library. </p>
+<p> It is instantiated by <pre><code>new KeyHolder(arr, fn, ele);</code></pre>
+<p> Test out pressing shift + 1 anywhere in the window. </p>
+<p> or meta + b + a in the phone field. </p>

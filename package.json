@@ -1,0 +1,17 @@
+{
+  "name": "KeyHolder",
+  "version": "0.1.0",
+  "author": "Blaine Kasten <blainekasten@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/blainekasten/KeyHolder.js.git"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-contrib-uglify": "~0.2.4",
+    "matchdep": "~0.1.2",
+    "grunt-karma": "~0.4.4",
+    "grunt-contrib-watch": "~0.4.4"
+  }
+}
