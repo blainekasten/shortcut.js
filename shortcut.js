@@ -6,7 +6,7 @@
  */
 
 ;(function(window){
-  var mappings, shortcuts, downkeys, shortcut, globalPause;
+  var mappings, pausedMappings, shortcuts, downkeys, shortcut, globalPause;
 
   /*
    * if window.shortcut previously existed, we can use a noConflict method
@@ -44,6 +44,18 @@
 
 
   /*
+   * Basically a mirror of the mappings.
+   * However, this internal hash is only used as a holding place
+   * for functions that are paused. When they are resumed, they get
+   * bumped back into the mappings hash
+   *
+   * @type {Object}
+   */
+
+  pausedMappings = {};
+
+
+  /*
    * This array of selectors is used to save computation on keydowns.
    * We can iterate through the list here to find selectors that need to be fired
    *
@@ -72,14 +84,14 @@
    */
 
   shortcut = function(shortcutStr, selector){
-    var keysInternallyExists = false, el;
+    var el;
     if (!shortcutStr) return false;
 
     selector = selector || 'body';
 
     // check if element and keys exists in mappings
     if (mappings[shortcutStr] === undefined) mappings[shortcutStr] = {};
-    mappings[shortcutStr][selector] === undefined ? mappings[shortcutStr][selector] = [] : keysInternallyExists = true;
+    if (mappings[shortcutStr][selector] === undefined) mappings[shortcutStr][selector] = [];
 
     // Push shortcut into array
     shortcuts.push(shortcutStr);
@@ -88,12 +100,17 @@
     return {
       bindsTo: _bindsTo,
       preventDefault: _preventDefault,
+      pause: _pause,
+      resume: _resume,
       trigger: _trigger,
       unbind: _unbind,
       keys: shortcutStr,
       selector: selector,
       get functions() {
         return mappings[shortcutStr][selector];
+      },
+      get pausedFunctions() {
+        return pausedMappings[shortcutStr][selector];
       }
     };
 
@@ -138,6 +155,37 @@
     return shortcut;
   };
 
+
+  /*
+   * Pauses dispatching for the associated keyboard shortcut
+   *
+   * @chainable
+   */
+
+  function _pause(){
+    // check if element and keys exists in mappings
+    if (pausedMappings[this.keys] === undefined) pausedMappings[this.keys] = {};
+    if (pausedMappings[this.keys][this.selector] === undefined) pausedMappings[this.keys][this.selector] = this.functions;
+
+    // Drops the functions from the mappings
+    this.unbind();
+    return this;
+  }
+
+
+  /*
+   * Resumes dispatching for the associated keyboard shortcut
+   *
+   * @chainable
+   */
+
+  function _resume(){
+    var fns = this.pausedFunctions;
+
+    mappings[this.keys][this.selector] = fns;
+
+    return this;
+  }
 
   /*
    * Triggering function. It will call the functions
