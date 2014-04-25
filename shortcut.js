@@ -6,7 +6,7 @@
  */
 
 ;(function(window){
-  var mappings, shortcuts, downkeys, shortcut;
+  var mappings, shortcuts, downkeys, shortcut, globalPause;
 
   /*
    * if window.shortcut previously existed, we can use a noConflict method
@@ -37,6 +37,7 @@
    *     ]
    *   }
    *
+   * @type {Object}
    */
 
   mappings = {};
@@ -45,6 +46,8 @@
   /*
    * This array of selectors is used to save computation on keydowns.
    * We can iterate through the list here to find selectors that need to be fired
+   *
+   * @type {Array}
    */
 
   shortcuts = [];
@@ -52,6 +55,8 @@
 
   /*
    * An array of keys that are being pressed down at any one time.
+   *
+   * @type {Array}
    */
 
   downKeys = [];
@@ -96,31 +101,82 @@
 
 
   /*
+   * NO CONFLICT function
+   *
+   * @chainable
+   */
+
+  shortcut.noConflict = function(){
+    window.shortcut = _noConflict;
+    return this;
+  };
+
+
+  /*
+   * A pause function. This prevents anything from being registered or called
+   * until shortcut.resume() is called
+   *
+   * @chainable
+   */
+
+  shortcut.pause = function(){
+    globalPause = true;
+
+    return shortcut;
+  };
+
+
+  /*
+   * Resume function. This will make undo shortcut.pause()
+   *
+   * @chainable
+   */
+
+  shortcut.resume = function(){
+    globalPause = false;
+
+    return shortcut;
+  };
+
+
+  /*
    * Triggering function. It will call the functions
    * associated to the shortcut assigned
+   *
+   * @chainable
    */
 
   function _trigger(){
-    var fns = this.functions;
+    if (globalPause) return;
+
+    var fns = this.functions,
+        fakeEvent = {preventDefault: function(){}};
 
     for (var i in fns){
-      var fakeEvent = {preventDefault: function(){}}
       fns[i](fakeEvent);
     }
+
+    return this;
   }
 
 
   /*
    * unbind functions for a shortcut!
+   *
+   * @chainable
    */
 
   function _unbind(){
     mappings[this.keys][this.selector] = [];
+
+    return this;
   }
 
 
   /*
    * Makes a key binding preventDefault
+   *
+   * @chainable
    */
 
   function _preventDefault(){
@@ -129,6 +185,8 @@
       return false;
     };
     this.bindsTo(preventDefault);
+
+    return this;
   }
 
 
@@ -186,8 +244,8 @@
   function onKeyDown(e){
     downKeys.push(evaluateKey(e));
 
-    console.log(downKeys);
-    console.log(shortcuts);
+    // Do nothing during globalPause
+    if (globalPause) return;
 
     // Loop through array of shortcuts
     for (var i in shortcuts){
@@ -222,6 +280,12 @@
       downKeys.splice(index, 1);
   }
 
+  /*
+   * Takes EventData and returns a character string
+   *
+   * @params {Event}
+   * @returns {String}
+   */
 
   function evaluateKey(e){
     var char;
@@ -387,16 +451,6 @@
         };
     }
   })();
-
-
-  /*
-   * NO CONFLICT function
-   */
-
-  shortcut.noConflict = function(){
-    window.shortcut = _noConflict;
-    return this;
-  };
 
 
   // Export to window object
