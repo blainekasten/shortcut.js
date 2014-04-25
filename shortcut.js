@@ -68,6 +68,7 @@
 
   shortcut = function(shortcutStr, selector){
     var keysInternallyExists = false, el;
+    if (!shortcutStr) return false;
 
     selector = selector || 'body';
 
@@ -82,14 +83,40 @@
     return {
       bindsTo: _bindsTo,
       preventDefault: _preventDefault,
+      trigger: _trigger,
+      unbind: _unbind,
       keys: shortcutStr,
       selector: selector,
       get functions() {
-        return mappings[selector][shortcutStr];
+        return mappings[shortcutStr][selector];
       }
     };
 
   };
+
+
+  /*
+   * Triggering function. It will call the functions
+   * associated to the shortcut assigned
+   */
+
+  function _trigger(){
+    var fns = this.functions;
+
+    for (var i in fns){
+      var fakeEvent = {preventDefault: function(){}}
+      fns[i](fakeEvent);
+    }
+  }
+
+
+  /*
+   * unbind functions for a shortcut!
+   */
+
+  function _unbind(){
+    mappings[this.keys][this.selector] = [];
+  }
 
 
   /*
@@ -281,23 +308,6 @@
 
 
   /*
-   * Export to window object
-   */
-
-  window.shortcut = shortcut;
-
-
-  /*
-   * NO CONFLICT function
-   */
-
-  shortcut.noConflict = function(){
-    window.shortcut = _noConflict;
-    return this;
-  };
-
-
-  /*
    * DOM Ready function
    *
    * @params {Function}
@@ -378,5 +388,24 @@
     }
   })();
 
+
+  /*
+   * NO CONFLICT function
+   */
+
+  shortcut.noConflict = function(){
+    window.shortcut = _noConflict;
+    return this;
+  };
+
+
+  // Export to window object
+  window.shortcut = shortcut;
+
+
+  // Export shortcut as an AMD module
+  if (typeof define === 'function' && define.amd) {
+    define(shortcut);
+  }
 
 })(window);
