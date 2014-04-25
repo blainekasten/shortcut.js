@@ -10,10 +10,11 @@ Features!
 
 - Chainable
 - noConflict mode
+- Global pause/resume functions
 - Tested in latest Firefox/Chrome/Safari (IE8 support coming soon)
-- AMD compatibility (coming soon)
+- AMD compatibility (needs testing)
 
-Documentation
+API
 ============
 
 #### shortcut(shortcutKeys, /* optional selector */)
@@ -23,11 +24,28 @@ Documentation
 
 - `String selector:` a css selector used to specify if the shortcut should be bound to an element. For example, if you wanted a user to be able to press shift+g together in an input box to run a function to uppercase the entire input value, simply do something like: `shortcut('shift =', 'input#uppercase').bindsTo(uppercaseInput)`. When the selector argument is not supplied, the shortcut will get called on the window, meaning at any time the shortcut is pressed the functions will run.
 
-#### bindsTo(fn)
+#### +pause()
+
+This function globally pauses all shortcut function dispatching. Keyboard shortcuts pressed after this function will not fire their associated functions.
+
+Useage:
+
+    shortcut.pause();
+    
+#### +resume()
+
+This function globally resumes all shortcut function dispatching. Keyboard shortcuts pressed after this function WILL fire their associated functions.
+
+Useage:
+
+    shortcut.resume();
+    
+
+#### -bindsTo(fn)
 
 - `function fn:` A function which gets ran when the shortcutKeys are pressed in the appropriate selector.
 
-#### preventDefault()
+#### -preventDefault()
 
 A function that prevents default on the current shortcut.
 Usage: 
@@ -36,7 +54,7 @@ Usage:
     
 This usage would cause cmd + a to not hightlight the input, but rather call the uppercaseInput functions.
 
-#### trigger()
+#### -trigger()
 
 A function to trigger the functions associated to a shortcut.
 Usage:
@@ -45,7 +63,7 @@ Usage:
     // Triggers the bindsTo function and outputs:
     // "triggerMe!"
 
-#### unbind()
+#### -unbind()
 
 A function used to remove bindings to keyboard shortcuts.
 
@@ -54,8 +72,6 @@ Usage:
     shortcut('meta a', 'input').unbind()
     
 Now when a user presses meta a in an input, it will not touch `shortcut` and run its normal native events.
-
-
 
 How to use
 ===========
@@ -89,8 +105,8 @@ To Do
 - normalize keycodes cross OS.
 
 Functions to add:
-- shortcut().pause(). With no argument, it globally pauses all shortcut functions. With argument, it pauses the specific shortcut globally, or for that specific element.
-- shortcut().resume(). Same Rules Apply.
+- shortcut().pause(). pauses the associated shortcut function dispatching for the time being.
+- shortcut().resume(). resumes the associated shortcut function dispatching.
 
 
 License
