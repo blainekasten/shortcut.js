@@ -276,6 +276,7 @@
   /*
    * Export to window object
    */
+
   window.shortcut = shortcut;
 
 
