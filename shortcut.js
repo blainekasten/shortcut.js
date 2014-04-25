@@ -68,25 +68,12 @@
 
   shortcut = function(shortcutStr, selector){
     var keysInternallyExists = false, el;
-    document.querySelector('body').selector = 'body';
 
-    if (!selector)
-      el = selector = 'body';
-    else
-      el = findElement(selector);
-
-    // Report error if no element was not found. 
-    if (!el){
-      error("An element was not found for selector: " + selector);
-      return;
-    }
+    selector = selector || 'body';
 
     // check if element and keys exists in mappings
     if (mappings[shortcutStr] === undefined) mappings[shortcutStr] = {};
     mappings[shortcutStr][selector] === undefined ? mappings[shortcutStr][selector] = [] : keysInternallyExists = true;
-
-    // Attach the selector to the element for tracking
-    el.selector = selector;
 
     // Push shortcut into array
     shortcuts.push(shortcutStr);
@@ -95,7 +82,6 @@
     return {
       bindsTo: _bindsTo,
       keys: shortcutStr,
-      el: el,
       selector: selector,
       get functions() {
         return mappings[selector][shortcutStr];
@@ -288,5 +274,88 @@
     window.shortcut = _noConflict;
     return this;
   };
+
+
+  /*
+   * DOM Ready function
+   *
+   * @params {Function}
+   */
+
+  (function(){
+    var called = false;
+
+    function ready() { 
+        if (called) return;
+        called = true;
+        // Set up dom selectors
+        document.querySelector('body').selector = 'body';
+
+        // Iterate through shortcuts
+        for (var key in mappings){
+          var elSelectors = mappings[key];
+
+          // Iterate through DOM selectors
+          for (var selectorKey in elSelectors){
+            var el = findElement(selectorKey);
+
+            // Report error if no element was not found. 
+            if (!el){
+              error("An element was not found for selector: " + selector);
+              return;
+            }
+
+            // Assign selector to the selectorKey, for future grabbing
+            el.selector = selectorKey;
+          }
+        }
+    }
+
+
+    if ( document.addEventListener ) { // native event
+        document.addEventListener( "DOMContentLoaded", ready, false );
+    } else if ( document.attachEvent ) {  // IE
+        var isFrame;
+
+        try {
+            isFrame = window.frameElement !== null;
+        } catch(e) {}
+
+        // IE, the document is not inside a frame
+        if ( document.documentElement.doScroll && !isFrame ) {
+            var tryScroll = function(){
+                if (called) return;
+                try {
+                    document.documentElement.doScroll("left");
+                    ready();
+                } catch(e) {
+                    setTimeout(tryScroll, 10);
+                }
+            };
+            tryScroll();
+        }
+
+        // IE, the document is inside a frame
+        document.attachEvent("onreadystatechange", function(){
+            if ( document.readyState === "complete" ) {
+                ready();
+            }
+        });
+    }
+
+    // Old browsers
+    if (window.addEventListener)
+        window.addEventListener('load', ready, false);
+    else if (window.attachEvent)
+        window.attachEvent('onload', ready);
+    else {
+        var fn = window.onload; // very old browser, copy old onload
+        window.onload = function() { // replace by new onload and call the old one
+            fn && fn();
+            ready();
+        };
+    }
+  })();
+
 
 })(window);
