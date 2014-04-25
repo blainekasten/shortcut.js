@@ -28,8 +28,8 @@ var banner = ['/**', ' * <%= pkg.name %> ', ' * @version <%= pkg.version %> ', '
  */
 
 var code = function(){
-  gulp.watch('shortcuts.js', function(){
-    gulp.src('shortcuts.js')
+  gulp.watch('shortcut.js', function(){
+    gulp.src('shortcut.js')
       .pipe(jshint({expr: true})) // JSHint
       .pipe(jshint.reporter('default'));
 
@@ -93,7 +93,7 @@ var buildDist = function(){
       .pipe(gulp.dest('./'));
 
     // Build Minified and unminified Javascript
-    gulp.src('shortcuts.js')
+    gulp.src('shortcut.js')
       .pipe(jshint({expr: true})) // jslint
       .pipe(jshint.reporter('default'))
       .pipe(uglify()) // Uglify && Minify
