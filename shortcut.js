@@ -81,6 +81,7 @@
     // Chaining methods
     return {
       bindsTo: _bindsTo,
+      preventDefault: _preventDefault,
       keys: shortcutStr,
       selector: selector,
       get functions() {
@@ -89,6 +90,19 @@
     };
 
   };
+
+
+  /*
+   * Makes a key binding preventDefault
+   */
+
+  function _preventDefault(){
+    var preventDefault = function(e){
+      e.preventDefault();
+      return false;
+    };
+    this.bindsTo(preventDefault);
+  }
 
 
   /*
@@ -145,9 +159,13 @@
   function onKeyDown(e){
     downKeys.push(evaluateKey(e));
 
+    console.log(downKeys);
+    console.log(shortcuts);
+
     // Loop through array of shortcuts
     for (var i in shortcuts){
       var shortcut = shortcuts[i];
+
 
       // compare shortcut to array of pressed items
       if (isEqArrays(downKeys, shortcut.split(' '))){
@@ -181,6 +199,9 @@
   function evaluateKey(e){
     var char;
     switch(e.keyCode){
+      case 224: //firefox meta
+        char = 'meta'; 
+        break;
       case 91:
         char = 'meta';
         break;

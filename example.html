@@ -4,10 +4,9 @@
     window.shortcut = 'hello'
   </script>
   <script src='shortcut.js'></script>
-  <script src='libs/jquery.min.js'></script>
   <script>
    var phonefn = function(e){
-      alert('Congrats, you pressed cmd+b+a in the phone field.');
+      e.target.value = "You did it!";
     }
     var windowfn = function(e){
       alert('Congrats! You pressed shift 1 somewhere in the window.');
@@ -15,7 +14,7 @@
 
     s = shortcut.noConflict()
 
-    s('meta a b', '#phone').bindsTo(phonefn)
+    s('meta a', '#phone').bindsTo(phonefn).preventDefault()
     s('shift 1').bindsTo(windowfn)
 
     console.log("SHORTCUT.JS: " + shortcut + " Should be 'hello'. If not, noConflict is failing");
@@ -29,4 +28,4 @@
 <p> This page has keyboard shortcuts via the shorcut library. </p>
 <p> It is instantiated by <pre><code>shortcut('meta b a').bindsTo(function(){...});</code></pre>
 <p> Test out pressing shift + 1 anywhere in the window. </p>
-<p> or meta + b + a in the phone field. </p>
+<p> or meta + a in the phone field. </p>
