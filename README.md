@@ -14,6 +14,28 @@ Features!
 - Tested in latest Firefox/Chrome/Safari (IE8 support coming soon)
 - AMD compatibility (needs testing)
 
+How to use
+===========
+
+##### General
+
+    function uppercaseInput(e){...}
+    function validateInput(e){...}
+    
+    shortcut('shift =', 'input#uppercase').bindsTo(uppercaseInput).bindsTo(validateInput);
+    
+Here, when a user presses the + button, we run an uppercaseInput function, and then a validateInput function.
+
+##### noConflict
+
+If you want to return the global `shortcut` namespace to its previous use, follow this:
+
+    var s = shortcut.noConflict();
+    s('shift = ', 'input#uppercase').bindsTo(uppercaseInput);
+    
+    console.log(shorcut); 
+    // outputs whatever window.shortcut was before the shortcut.js library was loaded
+
 API
 ============
 
@@ -69,32 +91,33 @@ A function used to remove bindings to keyboard shortcuts.
 
 Usage:
 
-    shortcut('meta a', 'input').unbind()
+    shortcut('meta a', 'input').unbind();
     
 Now when a user presses meta a in an input, it will not touch `shortcut` and run its normal native events.
 
-How to use
-===========
+#### -pause()
 
-##### General
+Pauses event dispatching for the associated shortcut.
 
-    function uppercaseInput(e){...}
-    function validateInput(e){...}
+Usage:
+
+    shortcut('meta a', 'input').pause();
     
-    shortcut('shift =', 'input#uppercase').bindsTo(uppercaseInput).bindsTo(validateInput);
-    
-Here, when a user presses the + button, we run an uppercaseInput function, and then a validateInput function.
+When a user presss meta a in an input, it will not fire associated functions. Once `-resume()` is called they will fire.
 
-##### noConflict
+#### -resume()
 
-If you want to return the global `shortcut` namespace to its previous use, follow this:
+Resumes event dispatching for the associated shortcut.
 
-    var s = shortcut.noConflict();
-    s('shift = ', 'input#uppercase').bindsTo(uppercaseInput);
+Usage:
+
+    shortcut('meta a', 'input').pause();
+    // pressing meta a in an input does nothing
+    shortcut('meta a', 'input').resume();
+    // pressing meta a dispatches the functions again
     
-    console.log(shorcut); 
-    // outputs whatever window.shortcut was before the shortcut.js library was loaded
-    
+When a user presss meta a in an input, it will not fire associated functions. Once `-resume()` is called they will fire.
+
 
 To Do
 ===========
@@ -105,8 +128,8 @@ To Do
 - normalize keycodes cross OS.
 
 Functions to add:
-- shortcut().pause(). pauses the associated shortcut function dispatching for the time being.
-- shortcut().resume(). resumes the associated shortcut function dispatching.
+- shortcut.async() - Makes event dispatching occur asynchronously.
+- shortcut.sync() - Makes event dispatching occur synchronously.
 
 
 License
