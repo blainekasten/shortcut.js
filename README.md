@@ -10,7 +10,7 @@ Features!
 
 - Chainable
 - noConflict mode
-- CrossBrowser (coming soon)
+- Tested in latest Firefox/Chrome/Safari (IE8 support coming soon)
 - AMD compatibility (coming soon)
 
 Documentation
@@ -26,6 +26,12 @@ Documentation
 #### bindsTo(fn)
 
 - `function fn:` A function which gets ran when the shortcutKeys are pressed in the appropriate selector.
+
+#### preventDefault()
+
+A function that prevents default on the current shortcut.
+Useage: `shortcut('meta a', 'input').bindsTo(uppercaseInput).preventDefault()`
+This usage would cause cmd + a to not hightlight the input, but rather call the uppercaseInput functions.
 
 
 How to use
@@ -56,7 +62,6 @@ To Do
 
 - Build test suite.
 - Complete CrossBrowser testing and compatibility.
-- Allow `shortcut()` to be called before the dom is ready.
 - Complete AMD compatibility.
 
 License
