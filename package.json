@@ -1,6 +1,6 @@
 {
-  "name": "shortcuts.js",
-  "version": "1.0.0",
+  "name": "shortcut.js",
+  "version": "1.0.1",
   "author": "Blaine Kasten <blainekasten@gmail.com>",
   "keywords": [
     "shortcut",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/blainekasten/KeyHolder.js.git"
+    "url": "git://github.com/blainekasten/shortcut.js"
   },
   "devDependencies": {
     "gulp": "~3.5.0",
