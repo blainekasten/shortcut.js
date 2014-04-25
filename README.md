@@ -30,8 +30,31 @@ Documentation
 #### preventDefault()
 
 A function that prevents default on the current shortcut.
-Useage: `shortcut('meta a', 'input').bindsTo(uppercaseInput).preventDefault()`
+Usage: 
+
+    shortcut('meta a', 'input').bindsTo(uppercaseInput).preventDefault()
+    
 This usage would cause cmd + a to not hightlight the input, but rather call the uppercaseInput functions.
+
+#### trigger()
+
+A function to trigger the functions associated to a shortcut.
+Usage:
+
+    shortcut('meta a', 'input').bindsTo(function(e){console.log('triggerMe!');}).trigger();
+    // Triggers the bindsTo function and outputs:
+    // "triggerMe!"
+
+#### unbind()
+
+A function used to remove bindings to keyboard shortcuts.
+
+Usage:
+
+    shortcut('meta a', 'input').unbind()
+    
+Now when a user presses meta a in an input, it will not touch `shortcut` and run its normal native events.
+
 
 
 How to use
@@ -62,7 +85,13 @@ To Do
 
 - Build test suite.
 - Complete CrossBrowser testing and compatibility.
-- Complete AMD compatibility.
+- Verify AMD compatibility.
+- normalize keycodes cross OS.
+
+Functions to add:
+- shortcut().pause(). With no argument, it globally pauses all shortcut functions. With argument, it pauses the specific shortcut globally, or for that specific element.
+- shortcut().resume(). Same Rules Apply.
+
 
 License
 ===========
