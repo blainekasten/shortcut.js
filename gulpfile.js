@@ -80,7 +80,7 @@ var buildDist = function(){
       .pipe(bump({ type: bumpType.toLowerCase() }))
       .pipe(gulp.dest('./'));
 
-    pkg = require('./package.json')
+    pkg = require('./package.json');
 
     // Build Minified and unminified Javascript
     gulp.src('shortcuts.js')
