@@ -58,7 +58,6 @@ To Do
 - Complete CrossBrowser testing and compatibility.
 - Allow `shortcut()` to be called before the dom is ready.
 - Complete AMD compatibility.
-- 
 
 License
 ===========
