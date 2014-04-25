@@ -4,8 +4,8 @@ var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     bump = require('gulp-bump'),
     rename = require('gulp-rename'),
-    uglify = require('gulp-uglify'),
     pkg = require('./package.json'),
+    uglify = require('gulp-uglify'),
     jasmine = require('gulp-jasmine'),
     prompt = require('prompt'),
     git = require('gulp-git'),
@@ -55,8 +55,8 @@ var code = function(){
  */
 
 var buildDist = function(){
-  var bumpTypes = ['major', 'minor', 'patch'];
-  var bumpType = gutil.env.type;
+  var bumpTypes = ['major', 'minor', 'patch'],
+      bumpType = gutil.env.type;
 
   if (!bumpType) {
     console.log("\nYou must pass a build bump type [major, minor, patch]".red);
@@ -67,6 +67,18 @@ var buildDist = function(){
   // Check if type matches a needed bump version
   if (bumpTypes.lastIndexOf(bumpType.toLowerCase()) == -1)
     return console.log("\nInvalid build type. Must be major, minor, or patch\n".red);
+
+  // Async makes this number undependable unless manually figured out
+  var pkgVersionArr = pkg.version.split('.'),
+      bumpPosition =  bumpTypes.indexOf(bumpType),
+      positionsToClear = pkgVersionArr.length - bumpPosition - 1,
+      bumpedVersion = Number(pkgVersionArr[bumpTypes.indexOf(bumpType)]) + 1;
+
+  pkgVersionArr[bumpTypes.indexOf(bumpType)] = bumpedVersion;
+  for (var i = 2; i > bumpPosition; i--){
+    pkgVersionArr[i] = 0;
+  }
+  pkg.version = pkgVersionArr.join('.');
 
   prompt.start();
   prompt.get('Confirm Build Process (y/n)'.green, function(err, result){
@@ -79,8 +91,6 @@ var buildDist = function(){
     gulp.src('./package.json')
       .pipe(bump({ type: bumpType.toLowerCase() }))
       .pipe(gulp.dest('./'));
-
-    pkg = require('./package.json');
 
     // Build Minified and unminified Javascript
     gulp.src('shortcuts.js')
