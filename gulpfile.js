@@ -6,11 +6,13 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     pkg = require('./package.json'),
     uglify = require('gulp-uglify'),
+    coffee = require('gulp-coffee'),
     jasmine = require('gulp-jasmine'),
     prompt = require('prompt'),
     git = require('gulp-git'),
     wait = require('gulp-wait'),
     notify = require('gulp-notify'),
+    karma = require('gulp-karma'),
     header = require('gulp-header');
 
 var banner = ['/**', ' * <%= pkg.name %> ', ' * @version <%= pkg.version %> ', ' * @author <%= pkg.author %> ', ' * @license <%= pkg.licenses.type %> ', ' */ \n\n'].join("\n");
@@ -125,10 +127,11 @@ var buildDist = function(){
  */
 
 var testCode = function(){
-  //gulp.src('./test/*.coffee')
-    //.pipe(coffee({ bare: true }).on('error', gutil.log)) // coffeescript compile
-    //.pipe(gulp.dest('test'))
-    //.pipe(jasmine()); // Run jasmine tests
+  gulp.src('./foobar')
+    .pipe(karma({
+      configFile: './karma.conf.js',
+      action: 'run'
+    })).on('error', function(err){ console.log(err); });
 }
 
 
@@ -139,4 +142,5 @@ var testCode = function(){
 gulp.task('default', code);
 gulp.task('code', code);
 gulp.task('build', buildDist);
+
 gulp.task('test', testCode);

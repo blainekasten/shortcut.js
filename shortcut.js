@@ -6,14 +6,24 @@
  */
 
 ;(function(window){
-  var mappings, pausedMappings, shortcuts, downkeys, shortcut, globalPause;
+  var mappings, pausedMappings, shortcuts, downkeys, shortcut, globalPause,
+      _noConflict, DOM_LOADED;
 
   /*
    * if window.shortcut previously existed, we can use a noConflict method
    * to return the shortcut namespace
    */
 
-  var _noConflict = window.shortcut;
+  _noConflict = window.shortcut;
+
+
+  /*
+   * Boolean to know when the dom is loaded
+   *
+   * @defaults false
+   */
+
+  DOM_LOADED = false;
 
 
   /*
@@ -44,10 +54,8 @@
 
 
   /*
-   * Basically a mirror of the mappings.
-   * However, this internal hash is only used as a holding place
-   * for functions that are paused. When they are resumed, they get
-   * bumped back into the mappings hash
+   * A hash of paused shortcut strings to element selectors
+   * A set in here is considered paused
    *
    * @type {Object}
    */
@@ -84,8 +92,8 @@
    */
 
   shortcut = function(shortcutStr, selector){
-    var el;
-    if (!shortcutStr) return false;
+    var el, isPaused;
+    if (!shortcutStr || typeof shortcutStr !== 'string') return false;
 
     selector = selector || 'body';
 
@@ -96,6 +104,13 @@
     // Push shortcut into array
     shortcuts.push(shortcutStr);
 
+    if (DOM_LOADED){
+      el = findElement(selector);
+      if (el) el.selector = selector;
+    }
+
+    isPaused = pausedMappings[shortcutStr] === selector ? true : false;
+
     // Chaining methods
     return {
       bindsTo: _bindsTo,
@@ -104,14 +119,12 @@
       resume: _resume,
       trigger: _trigger,
       unbind: _unbind,
+      isPaused: isPaused,
       keys: shortcutStr,
       selector: selector,
       get functions() {
         return mappings[shortcutStr][selector];
       },
-      get pausedFunctions() {
-        return pausedMappings[shortcutStr][selector];
-      }
     };
 
   };
@@ -164,11 +177,11 @@
 
   function _pause(){
     // check if element and keys exists in mappings
-    if (pausedMappings[this.keys] === undefined) pausedMappings[this.keys] = {};
-    if (pausedMappings[this.keys][this.selector] === undefined) pausedMappings[this.keys][this.selector] = this.functions;
+
+    if (pausedMappings[this.keys] === undefined) pausedMappings[this.keys] = this.selector;
+    this.isPaused = true;
 
     // Drops the functions from the mappings
-    this.unbind();
     return this;
   }
 
@@ -180,9 +193,10 @@
    */
 
   function _resume(){
-    var fns = this.pausedFunctions;
+    // destroy key/value of this.keys
+    if (pausedMappings[this.keys]) delete pausedMappings[this.keys];
 
-    mappings[this.keys][this.selector] = fns;
+    this.isPaused = false;
 
     return this;
   }
@@ -195,10 +209,10 @@
    */
 
   function _trigger(){
-    if (globalPause) return;
+    if (globalPause || this.isPaused) return;
 
     var fns = this.functions,
-        fakeEvent = {preventDefault: function(){}};
+        fakeEvent = {preventDefault: function(){}}; // TODO: Expand this
 
     for (var i in fns){
       fns[i](fakeEvent);
@@ -279,7 +293,7 @@
    */
 
   function error(msg){
-    console === undefined ? "" : console.error === undefined ? console.log(msg) : console.error(msg);
+    throw new Error(msg);
   }
 
 
@@ -291,26 +305,21 @@
 
   function onKeyDown(e){
     downKeys.push(evaluateKey(e));
+    var _shortcut,
+        downKeyString = downKeys.join(' ');
 
     // Do nothing during globalPause
     if (globalPause) return;
 
-    // Loop through array of shortcuts
-    for (var i in shortcuts){
-      var shortcut = shortcuts[i];
+    _shortcut = shortcut(downKeyString, e.target.selector);
 
+    if (_shortcut.functions && _shortcut.functions.length){
+      downKeys = [];
+      if (_shortcut.isPaused) return;
 
-      // compare shortcut to array of pressed items
-      if (isEqArrays(downKeys, shortcut.split(' '))){
-        var fnForShorcut = mappings[shortcut][e.target.selector];
-
-        // Clear the downKeys array so we can accept shortcuts again
-        downKeys = [];
-
-        for (var _fn in fnForShorcut){
-          fnForShorcut[_fn](e);
-        }
-
+      // Call functions
+      for (var _i in _shortcut.functions){
+        _shortcut.functions[_i](e);
       }
     }
   }
@@ -383,43 +392,6 @@
 
 
   /*
-   * Checks if a item is in an array
-   *
-   * @params {Array}
-   * @params
-   * @returns {Boolean}
-   */
-
-  function inArray(array, el) {
-    for ( var i = array.length; i--; ) {
-      if ( array[i] === el ) return true;
-    }
-    return false;
-  }
-
-
-  /*
-   * Checks if two arrays are equal, ignorant
-   * of order.
-   *
-   * @params {Array, Array}
-   * @returns Boolean
-   */
-
-  function isEqArrays(arr1, arr2) {
-    if ( arr1.length !== arr2.length ) {
-      return false;
-    }
-    for ( var i = arr1.length; i--; ) {
-      if ( !inArray( arr2, arr1[i] ) ) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-
-  /*
    * DOM Ready function
    *
    * @params {Function}
@@ -429,29 +401,31 @@
     var called = false;
 
     function ready() { 
-        if (called) return;
-        called = true;
-        // Set up dom selectors
-        document.querySelector('body').selector = 'body';
+      DOM_LOADED = true;
 
-        // Iterate through shortcuts
-        for (var key in mappings){
-          var elSelectors = mappings[key];
+      if (called) return;
+      called = true;
+      // Set up dom selectors
+      document.querySelector('body').selector = 'body';
 
-          // Iterate through DOM selectors
-          for (var selectorKey in elSelectors){
-            var el = findElement(selectorKey);
+      // Iterate through shortcuts
+      for (var key in mappings){
+        var elSelectors = mappings[key];
 
-            // Report error if no element was not found. 
-            if (!el){
-              error("An element was not found for selector: " + selector);
-              return;
-            }
+        // Iterate through DOM selectors
+        for (var selectorKey in elSelectors){
+          var el = findElement(selectorKey);
 
-            // Assign selector to the selectorKey, for future grabbing
-            el.selector = selectorKey;
+          // Report error if no element was not found. 
+          if (!el){
+            error("An element was not found for selector: " + selector);
+            return;
           }
+
+          // Assign selector to the selectorKey, for future grabbing
+          el.selector = selectorKey;
         }
+      }
     }
 
 
