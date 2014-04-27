@@ -122,7 +122,6 @@ When a user presss meta a in an input, it will not fire associated functions. On
 To Do
 ===========
 
-- Build test suite.
 - Complete CrossBrowser testing and compatibility.
 - Verify AMD compatibility.
 - normalize keycodes cross OS.
