@@ -1,23 +1,25 @@
 <head>
   <!--<script src='dist/KeyHolder.js'></script>-->
+  <meta http-equiv="X-UA-Compatible" content="IE=8">
   <script>
-    window.shortcut = 'hello'
+    window.shortcut = 'hello';
   </script>
   <script src='shortcut.js'></script>
   <script>
-   var phonefn = function(e){
-      e.target.value = "You did it!";
-    }
+    var phonefn = function(e){
+      el = e.target || e.srcElement;
+      el.value = "You did it!";
+    };
     var windowfn = function(e){
       alert('Congrats! You pressed shift 1 somewhere in the window.');
-    }
+    };
 
-    s = shortcut.noConflict()
+    var s = shortcut;//.noConflict();
 
-    s('meta a', '#phone').bindsTo(phonefn).preventDefault()
-    s('shift 1').bindsTo(windowfn)
+    s('meta a', '#phone').bindsTo(phonefn).preventDefault();
+    s('shift 1').bindsTo(windowfn);
 
-    console.log("SHORTCUT.JS: " + shortcut + " Should be 'hello'. If not, noConflict is failing");
+    //console.log("SHORTCUT.JS: " + shortcut + " Should be 'hello'. If not, noConflict is failing");
   </script>
 </head>
 

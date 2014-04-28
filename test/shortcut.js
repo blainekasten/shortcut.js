@@ -86,13 +86,13 @@ describe('shortcut.js', function(){
   // bindsTo function
   it('-bindsTo() should add a function to the array', function(){
     shortcut('f').bindsTo(testFn1).bindsTo(testFn2);
-    expect(shortcut('f').functions.length).toBe(2);
-    expect(typeof shortcut('f').functions[0]).toBe('function');
+    expect(shortcut('f').functions().length).toBe(2);
+    expect(typeof shortcut('f').functions()[0]).toBe('function');
   });
 
   // Prevents Default
   it('-preventDefault() should add a function to the array the preventsDefault', function(){
-    expect(shortcut('a').preventDefault().functions.length).toBe(3)
+    expect(shortcut('a').preventDefault().functions().length).toBe(3)
   });
 
   // Trigger function
@@ -117,6 +117,7 @@ describe('shortcut.js', function(){
     shortcut('a').pause().trigger()
     expect(testFn1).not.toHaveBeenCalled()
     expect(testFn2).not.toHaveBeenCalled()
+    expect(shortcut('a').isPaused).toBeTruthy()
   });
 
   // functions bound after pause
@@ -132,6 +133,7 @@ describe('shortcut.js', function(){
     expect(testFn2).not.toHaveBeenCalled()
     shortcut('r').resume().trigger()
     expect(testFn2).toHaveBeenCalled()
+    expect(shortcut('r').isPaused).toBeFalsy()
   });
 
   // error passing non function to bindsTo

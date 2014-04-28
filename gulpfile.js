@@ -35,8 +35,8 @@ var code = function(){
       .pipe(jshint({expr: true})) // JSHint
       .pipe(jshint.reporter('default'));
 
-    testCode();
   });
+  testCode();
 }
 
 /*

@@ -31,8 +31,13 @@
    * at the same time, in the correct object
    */
 
-  window.addEventListener('keydown', onKeyDown);
-  window.addEventListener('keyup', onKeyUp);
+  if (window.addEventListener){
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+  } else {
+    document.attachEvent('onkeydown', onKeyDown);
+    document.attachEvent('onkeyup', onKeyUp);
+  }
 
 
   /*
@@ -92,10 +97,10 @@
    */
 
   shortcut = function(shortcutStr, selector){
-    var el, isPaused;
+    var el, isPaused, _functions;
     if (!shortcutStr || typeof shortcutStr !== 'string') return false;
 
-    selector = selector || 'body';
+    selector = selector || 'body'; // Defaults to body
 
     // check if element and keys exists in mappings
     if (mappings[shortcutStr] === undefined) mappings[shortcutStr] = {};
@@ -104,12 +109,19 @@
     // Push shortcut into array
     shortcuts.push(shortcutStr);
 
+    // Make sure elements get the selector tied to it
     if (DOM_LOADED){
       el = findElement(selector);
       if (el) el.selector = selector;
     }
 
+    // decides if the shortcut is paused
     isPaused = pausedMappings[shortcutStr] === selector ? true : false;
+
+    // returns array of functions mapped to this shortcut
+    _functions = function(){
+      return mappings[shortcutStr][selector];
+    };
 
     // Chaining methods
     return {
@@ -122,11 +134,8 @@
       isPaused: isPaused,
       keys: shortcutStr,
       selector: selector,
-      get functions() {
-        return mappings[shortcutStr][selector];
-      },
+      functions: _functions
     };
-
   };
 
 
@@ -211,7 +220,7 @@
   function _trigger(){
     if (globalPause || this.isPaused) return;
 
-    var fns = this.functions,
+    var fns = this.functions(),
         fakeEvent = {preventDefault: function(){}}; // TODO: Expand this
 
     for (var i in fns){
@@ -306,20 +315,23 @@
   function onKeyDown(e){
     downKeys.push(evaluateKey(e));
     var _shortcut,
+        _shortcutFns,
+        _selector = e.srcElement? e.srcElement.selector : e.target.selector,
         downKeyString = downKeys.join(' ');
 
     // Do nothing during globalPause
     if (globalPause) return;
 
-    _shortcut = shortcut(downKeyString, e.target.selector);
+    _shortcut = shortcut(downKeyString, _selector);
+    _shortcutFns = _shortcut.functions();
 
-    if (_shortcut.functions && _shortcut.functions.length){
+    if (_shortcutFns && _shortcutFns.length){
       downKeys = [];
       if (_shortcut.isPaused) return;
 
       // Call functions
-      for (var _i in _shortcut.functions){
-        _shortcut.functions[_i](e);
+      for (var _i in _shortcutFns){
+        _shortcutFns[_i](e);
       }
     }
   }
@@ -332,7 +344,7 @@
    */
 
   function onKeyUp(e){
-    index = downKeys.indexOf(evaluateKey(e));
+    var index = downKeys.indexOf(evaluateKey(e));
     if (index !== -1)
       downKeys.splice(index, 1);
   }
@@ -483,5 +495,29 @@
   if (typeof define === 'function' && define.amd) {
     define(shortcut);
   }
+
+
+  // indexOf polyfill
+  if (!Array.prototype.indexOf){
+    Array.prototype.indexOf = function(elt /*, from*/)
+    {
+      var len = this.length >>> 0;
+
+      var from = Number(arguments[1]) || 0;
+      from = (from < 0)
+           ? Math.ceil(from)
+           : Math.floor(from);
+      if (from < 0)
+        from += len;
+
+      for (; from < len; from++)
+      {
+        if (from in this &&
+            this[from] === elt)
+          return from;
+      }
+      return -1;
+    };
+  } 
 
 })(window);
