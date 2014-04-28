@@ -10,8 +10,9 @@ Features!
 
 - Chainable
 - noConflict mode
-- Global pause/resume functions
-- Tested in latest Firefox/Chrome/Safari.
+- Global and Individual pause/resume functions
+- Cross OS Key Bindings ('mod' key)
+- CrossBrowser (IE8+, Chrome, FF, Safari Tested)
 - AMD compatibility
 
 How to use
@@ -22,9 +23,9 @@ How to use
     function uppercaseInput(e){...}
     function validateInput(e){...}
     
-    shortcut('shift =', 'input#uppercase').bindsTo(uppercaseInput).bindsTo(validateInput);
+    shortcut('mod =', 'input#uppercase').bindsTo(uppercaseInput).bindsTo(validateInput);
     
-Here, when a user presses the + button, we run an uppercaseInput function, and then a validateInput function.
+Here, when a user presses the the modifier key with the equals key, we run an uppercaseInput function, and then a validateInput function.
 
 ##### noConflict
 
@@ -33,7 +34,7 @@ If you want to return the global `shortcut` namespace to its previous use, follo
     var s = shortcut.noConflict();
     s('shift = ', 'input#uppercase').bindsTo(uppercaseInput);
     
-    console.log(shorcut); 
+    console.log(shortcut); 
     // outputs whatever window.shortcut was before the shortcut.js library was loaded
 
 API
@@ -117,16 +118,6 @@ Usage:
     // pressing meta a dispatches the functions again
     
 When a user presss meta a in an input, it will not fire associated functions. Once `-resume()` is called they will fire.
-
-
-To Do
-===========
-
-- normalize keycodes cross OS.
-
-Functions to add:
-- shortcut.async() - Makes event dispatching occur asynchronously.
-- shortcut.sync() - Makes event dispatching occur synchronously.
 
 
 License
