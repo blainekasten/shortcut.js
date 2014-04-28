@@ -252,8 +252,9 @@
 
   function _preventDefault(){
     var preventDefault = function(e){
-      e.preventDefault();
-      return false;
+      if (e.preventDefault) e.preventDefault();
+      e.returnValue = false; // IE prevent Default
+      return false; // Safari Prevent Default
     };
     this.bindsTo(preventDefault);
 
@@ -357,7 +358,12 @@
    */
 
   function evaluateKey(e){
-    var char;
+    var char,
+        OS_MOD_KEY_NAME = /Mac|iPod|iPhone|iPad/.test(navigator.platform)? 'meta' : 'ctrl',
+        OS_MAP = {};
+
+    OS_MAP[OS_MOD_KEY_NAME] = 'mod';
+
     switch(e.keyCode){
       case 224: //firefox meta
         char = 'meta'; 
@@ -396,6 +402,9 @@
         char = 'rtn';
         break;
     }
+
+    if (OS_MAP[char])
+      char = OS_MAP[char];
 
     if (!char)
       char = String.fromCharCode(e.keyCode || e.charCode).toLowerCase();

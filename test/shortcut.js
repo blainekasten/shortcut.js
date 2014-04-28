@@ -92,7 +92,17 @@ describe('shortcut.js', function(){
 
   // Prevents Default
   it('-preventDefault() should add a function to the array the preventsDefault', function(){
-    expect(shortcut('a').preventDefault().functions().length).toBe(3)
+    // Check that it gets added
+    expect(shortcut('a').preventDefault().functions().length).toBe(3);
+
+    // make sure it prevents default, sets returnValue to false, returns false
+    shortcut('i').preventDefault();
+    var e = $.Event('keydown', { keyCode: 73 });
+    var preventDefaultFn = shortcut('i').functions()[0];
+    var retVal = preventDefaultFn(e);
+    expect(retVal).toBe(false);
+    expect(e.isDefaultPrevented()).toBeTruthy();
+    expect(e.returnValue).toBe(false);
   });
 
   // Trigger function
