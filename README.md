@@ -12,7 +12,7 @@ Features!
 - noConflict mode
 - Global pause/resume functions
 - Tested in latest Firefox/Chrome/Safari.
-- AMD compatibility (needs testing)
+- AMD compatibility
 
 How to use
 ===========
@@ -122,7 +122,6 @@ When a user presss meta a in an input, it will not fire associated functions. On
 To Do
 ===========
 
-- Verify AMD compatibility.
 - normalize keycodes cross OS.
 
 Functions to add:
