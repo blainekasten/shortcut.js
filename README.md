@@ -11,7 +11,7 @@ Features!
 - Chainable
 - noConflict mode
 - Global pause/resume functions
-- Tested in latest Firefox/Chrome/Safari (IE8 support coming soon)
+- Tested in latest Firefox/Chrome/Safari.
 - AMD compatibility (needs testing)
 
 How to use
@@ -122,7 +122,6 @@ When a user presss meta a in an input, it will not fire associated functions. On
 To Do
 ===========
 
-- Complete CrossBrowser testing and compatibility.
 - Verify AMD compatibility.
 - normalize keycodes cross OS.
 
