@@ -131,7 +131,7 @@ var testCode = function(){
     .pipe(karma({
       configFile: './karma.conf.js',
       action: 'run'
-    })).on('error', function(err){ console.log(err); });
+    }));
 }
 
 

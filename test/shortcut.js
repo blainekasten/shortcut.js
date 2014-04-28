@@ -141,4 +141,11 @@ describe('shortcut.js', function(){
     expect(function(){shortcut('a').bindsTo('hello')}).toThrow(new Error("You must pass a function to the bindsTo functoin"));
   });
 
+  it('should be a registered AMD module', function(){
+    require(['shortcut'], function(_shortcut){
+      expect(shortcut).toBe(_shortcut);
+    })
+
+  });
+
 });

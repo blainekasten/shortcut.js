@@ -492,8 +492,8 @@
 
 
   // Export shortcut as an AMD module
-  if (typeof define === 'function' && define.amd) {
-    define(shortcut);
+  if (typeof window.define === 'function' && window.define.amd) {
+    window.define('shortcut', [], function(){ return shortcut; });
   }
 
 
@@ -504,9 +504,7 @@
       var len = this.length >>> 0;
 
       var from = Number(arguments[1]) || 0;
-      from = (from < 0)
-           ? Math.ceil(from)
-           : Math.floor(from);
+      from = (from < 0) ? Math.ceil(from) : Math.floor(from);
       if (from < 0)
         from += len;
 

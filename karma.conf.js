@@ -3,11 +3,12 @@ module.exports = function(config) {
     autoWatch: true,
     basePath: '',
     frameworks: ['jasmine'],
-    browsers: ['Firefox'],//, 'Firefox']//, 'PhantomJS'];
-    //browsers: ['Safari', 'Chrome', 'Firefox'],//, 'Firefox']//, 'PhantomJS'];
+    //browsers: ['Safari', 'Chrome', 'Firefox'],
+    browsers: ['Chrome'],
     colors: true,
     files: [
-      'libs/jquery.min.js',
+      'test/libs/require.js',
+      'test/libs/jquery.min.js',
       'shortcut.js',
       'test/shortcut.js'
     ],
