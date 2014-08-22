@@ -87,7 +87,7 @@ var buildDist = function(){
     result = result[Object.keys(result)[0]]
     if (result != 'y') return;
 
-    testCode(); // Run Tests
+    //testCode(); // Run Tests
 
     // Bump Version number
     gulp.src('./package.json')

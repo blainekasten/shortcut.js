@@ -6,7 +6,7 @@
  */
 
 ;(function(window){
-  var mappings, pausedMappings, shortcuts, downkeys, shortcut, globalPause,
+  var mappings, pausedMappings, shortcuts, downKeys, shortcut, globalPause,
       _noConflict, DOM_LOADED;
 
   /*
@@ -96,15 +96,15 @@
    * @returns {Object}
    */
 
-  shortcut = function(shortcutStr, selector){
-    var el, isPaused, _functions;
-    if (!shortcutStr || typeof shortcutStr !== 'string') return false;
+  shortcut = function(shortcutStr, _selector){
+    var el, isPaused, _functions, selector;
+    if (!shortcutStr || typeof shortcutStr !== 'string'){ return false; }
 
-    selector = selector || 'body'; // Defaults to body
+    selector = _selector || 'body'; // Defaults to body
 
     // check if element and keys exists in mappings
-    if (mappings[shortcutStr] === undefined) mappings[shortcutStr] = {};
-    if (mappings[shortcutStr][selector] === undefined) mappings[shortcutStr][selector] = [];
+    if (mappings[shortcutStr] === undefined){ mappings[shortcutStr] = {}; }
+    if (mappings[shortcutStr][selector] === undefined){ mappings[shortcutStr][selector] = []; }
 
     // Push shortcut into array
     shortcuts.push(shortcutStr);
@@ -112,7 +112,7 @@
     // Make sure elements get the selector tied to it
     if (DOM_LOADED){
       el = findElement(selector);
-      if (el) el.selector = selector;
+      if (el){ el.selector = selector; }
     }
 
     // decides if the shortcut is paused
@@ -187,7 +187,7 @@
   function _pause(){
     // check if element and keys exists in mappings
 
-    if (pausedMappings[this.keys] === undefined) pausedMappings[this.keys] = this.selector;
+    if (pausedMappings[this.keys] === undefined){ pausedMappings[this.keys] = this.selector; }
     this.isPaused = true;
 
     // Drops the functions from the mappings
@@ -203,7 +203,7 @@
 
   function _resume(){
     // destroy key/value of this.keys
-    if (pausedMappings[this.keys]) delete pausedMappings[this.keys];
+    if (pausedMappings[this.keys]){ delete pausedMappings[this.keys]; }
 
     this.isPaused = false;
 
@@ -218,7 +218,7 @@
    */
 
   function _trigger(){
-    if (globalPause || this.isPaused) return;
+    if (globalPause || this.isPaused){ return; }
 
     var fns = this.functions(),
         fakeEvent = {preventDefault: function(){}}; // TODO: Expand this
@@ -252,7 +252,7 @@
 
   function _preventDefault(){
     var preventDefault = function(e){
-      if (e.preventDefault) e.preventDefault();
+      if (e.preventDefault){ e.preventDefault(); }
       e.returnValue = false; // IE prevent Default
       return false; // Safari Prevent Default
     };
@@ -272,7 +272,7 @@
 
   function _bindsTo(fn){
     // Stop if not a function
-    if (typeof fn !== 'function') return error("You must pass a function to the bindsTo functoin");
+    if (typeof fn !== 'function'){ return error("You must pass a function to the bindsTo functoin"); }
 
     // Add function to array
     mappings[this.keys][this.selector].push(fn);
@@ -321,14 +321,14 @@
         downKeyString = downKeys.join(' ');
 
     // Do nothing during globalPause
-    if (globalPause) return;
+    if (globalPause){ return; }
 
     _shortcut = shortcut(downKeyString, _selector);
     _shortcutFns = _shortcut.functions();
 
     if (_shortcutFns && _shortcutFns.length){
       downKeys = [];
-      if (_shortcut.isPaused) return;
+      if (_shortcut.isPaused){ return; }
 
       // Call functions
       for (var _i in _shortcutFns){
@@ -346,8 +346,9 @@
 
   function onKeyUp(e){
     var index = downKeys.indexOf(evaluateKey(e));
-    if (index !== -1)
+    if (index !== -1) {
       downKeys.splice(index, 1);
+    }
   }
 
   /*
@@ -403,11 +404,13 @@
         break;
     }
 
-    if (OS_MAP[char])
+    if (OS_MAP[char]) {
       char = OS_MAP[char];
+    }
 
-    if (!char)
+    if (!char) {
       char = String.fromCharCode(e.keyCode || e.charCode).toLowerCase();
+    }
     return char;
   }
 
@@ -424,7 +427,7 @@
     function ready() { 
       DOM_LOADED = true;
 
-      if (called) return;
+      if (called){ return; }
       called = true;
       // Set up dom selectors
       document.querySelector('body').selector = 'body';
@@ -462,13 +465,13 @@
         // IE, the document is not inside a frame
         if ( document.documentElement.doScroll && !isFrame ) {
             var tryScroll = function(){
-                if (called) return;
-                try {
-                    document.documentElement.doScroll("left");
-                    ready();
-                } catch(e) {
-                    setTimeout(tryScroll, 10);
-                }
+              if (called){ return; }
+              try {
+                document.documentElement.doScroll("left");
+                ready();
+              } catch(e) {
+                setTimeout(tryScroll, 10);
+              }
             };
             tryScroll();
         }
@@ -482,14 +485,14 @@
     }
 
     // Old browsers
-    if (window.addEventListener)
+    if (window.addEventListener){
         window.addEventListener('load', ready, false);
-    else if (window.attachEvent)
+    } else if (window.attachEvent){
         window.attachEvent('onload', ready);
-    else {
+    } else {
         var fn = window.onload; // very old browser, copy old onload
         window.onload = function() { // replace by new onload and call the old one
-            fn && fn();
+            if (fn){ fn(); }
             ready();
         };
     }
@@ -508,20 +511,19 @@
 
   // indexOf polyfill
   if (!Array.prototype.indexOf){
-    Array.prototype.indexOf = function(elt /*, from*/)
-    {
+    Array.prototype.indexOf = function(elt /*, from*/) {
       var len = this.length >>> 0;
 
       var from = Number(arguments[1]) || 0;
       from = (from < 0) ? Math.ceil(from) : Math.floor(from);
-      if (from < 0)
+      if (from < 0) {
         from += len;
+      }
 
-      for (; from < len; from++)
-      {
-        if (from in this &&
-            this[from] === elt)
+      for (; from < len; from++) {
+        if (from in this && this[from] === elt) {
           return from;
+        }
       }
       return -1;
     };
