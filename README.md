@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/blainekasten/shortcut.js/badges/gpa.svg)](https://codeclimate.com/github/blainekasten/shortcut.js)
+
 shortcut.js
 ============
 
