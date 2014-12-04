@@ -1,4 +1,3 @@
-[![Code Climate](https://codeclimate.com/github/blainekasten/shortcut.js/badges/gpa.svg)](https://codeclimate.com/github/blainekasten/shortcut.js)
 
 shortcut.js
 ============
@@ -16,6 +15,11 @@ Features!
 - Cross OS Key Bindings ('mod' key)
 - CrossBrowser (IE8+, Chrome, FF, Safari Tested)
 - AMD compatibility
+
+Installation
+===========
+
+`bower install shortcut`
 
 How to use
 ===========
