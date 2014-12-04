@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     bump = require('gulp-bump'),
     rename = require('gulp-rename'),
     pkg = require('./package.json'),
+    bower_pkg = require('./bower.json'),
     uglify = require('gulp-uglify'),
     coffee = require('gulp-coffee'),
     jasmine = require('gulp-jasmine'),
@@ -91,6 +92,10 @@ var buildDist = function(){
 
     // Bump Version number
     gulp.src('./package.json')
+      .pipe(bump({ type: bumpType.toLowerCase() }))
+      .pipe(gulp.dest('./'));
+
+    gulp.src('./bower.json')
       .pipe(bump({ type: bumpType.toLowerCase() }))
       .pipe(gulp.dest('./'));
 
