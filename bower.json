@@ -1,0 +1,29 @@
+{
+  "name": "shortcut.js",
+  "main": "shortcut.js",
+  "version": "1.5.4",
+  "homepage": "https://github.com/blainekasten/shortcut.js",
+  "authors": [
+    "blainekasten <blainekasten@gmail.com>"
+  ],
+  "description": "Chainable keyboard shortcut bindings for the browser",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "shortcut",
+    "keydown",
+    "keyup",
+    "mousetrap",
+    "shortcut.js"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
