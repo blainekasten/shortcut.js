@@ -31,12 +31,14 @@
    * at the same time, in the correct object
    */
 
-  if (window.addEventListener){
-    window.addEventListener('keydown', onKeyDown);
-    window.addEventListener('keyup', onKeyUp);
-  } else {
-    document.attachEvent('onkeydown', onKeyDown);
-    document.attachEvent('onkeyup', onKeyUp);
+  if ( !/Mobi/.test(navigator.userAgent) ) {
+    if (window.addEventListener){
+      window.addEventListener('keydown', onKeyDown);
+      window.addEventListener('keyup', onKeyUp);
+    } else {
+      document.attachEvent('onkeydown', onKeyDown);
+      document.attachEvent('onkeyup', onKeyUp);
+    }
   }
 
 
