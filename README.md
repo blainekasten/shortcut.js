@@ -1,5 +1,5 @@
 
-shortcut.js
+shortcut.js [![Code Climate](https://codeclimate.com/github/blainekasten/shortcut.js/badges/gpa.svg)](https://codeclimate.com/github/blainekasten/shortcut.js)
 ============
 
 Ever wanted to add keyboard shortcuts to your website? but couldnt justify the time to develop it?
