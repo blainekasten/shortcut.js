@@ -1,6 +1,7 @@
 
-shortcut.js
+shortcut.js [![Circle CI](https://circleci.com/gh/blainekasten/shortcut.js.svg?style=svg&circle-token=b2b27495568119b977fcf8088c679c721c49792b)](https://circleci.com/gh/blainekasten/shortcut.js)
 ============
+
 
 Ever wanted to add keyboard shortcuts to your website? but couldnt justify the time to develop it?
 
