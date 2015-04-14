@@ -334,7 +334,9 @@
 
       // Call functions
       for (var _i in _shortcutFns){
-        _shortcutFns[_i](e);
+        if (_shortcutFns.hasOwnProperty(_i)) {
+          _shortcutFns[_i](e);
+        }
       }
     }
   }
@@ -369,7 +371,7 @@
 
     switch(e.keyCode){
       case 224: //firefox meta
-        char = 'meta'; 
+        char = 'meta';
         break;
       case 91:
         char = 'meta';
@@ -426,7 +428,7 @@
   (function(){
     var called = false;
 
-    function ready() { 
+    function ready() {
       DOM_LOADED = true;
 
       if (called){ return; }
@@ -442,7 +444,7 @@
         for (var selectorKey in elSelectors){
           var el = findElement(selectorKey);
 
-          // Report error if no element was not found. 
+          // Report error if no element was not found.
           if (!el){
             error("An element was not found for selector: " + selector);
             return;
@@ -529,6 +531,6 @@
       }
       return -1;
     };
-  } 
+  }
 
 })(window);
