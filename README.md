@@ -1,5 +1,5 @@
 
-shortcut.js [![Circle CI](https://circleci.com/gh/blainekasten/shortcut.js.svg?style=svg&circle-token=b2b27495568119b977fcf8088c679c721c49792b)](https://circleci.com/gh/blainekasten/shortcut.js)
+shortcut.js [![Code Climate](https://codeclimate.com/github/blainekasten/shortcut.js/badges/gpa.svg)](https://codeclimate.com/github/blainekasten/shortcut.js) [![Circle CI](https://circleci.com/gh/blainekasten/shortcut.js.svg?style=svg&circle-token=b2b27495568119b977fcf8088c679c721c49792b)](https://circleci.com/gh/blainekasten/shortcut.js)
 ============
 
 
