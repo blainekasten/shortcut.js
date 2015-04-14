@@ -1,0 +1,7 @@
+machine:
+  node:
+    version: 0.10.34
+
+test:
+  override:
+    - node ./node_modules/gulp/bin/gulp.js test
