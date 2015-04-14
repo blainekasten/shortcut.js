@@ -4,4 +4,4 @@ machine:
 
 test:
   override:
-    - gulp test
+    - node ./node_modules/gulp/bin/gulp.js test
