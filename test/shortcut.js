@@ -154,8 +154,7 @@ describe('shortcut.js', function(){
   it('should be a registered AMD module', function(){
     require(['shortcut'], function(_shortcut){
       expect(shortcut).toBe(_shortcut);
-    })
-
+    });
   });
 
 });
