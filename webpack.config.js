@@ -70,6 +70,6 @@ function modules(){
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
       { test: /\.js$/, loader: 'eslint', exclude: /node_modules/ }
     ]
-  }
+  };
 };
 
