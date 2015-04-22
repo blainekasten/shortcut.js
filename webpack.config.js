@@ -13,7 +13,7 @@ var webpack = require('webpack');
   //"/* jshint smarttabs:true, asi:true, curly: false, unused: false,  laxbreak: true, -W099, -W015 */ \n",
   //{ raw: true, entryOnly: true }
 //)
-var uglifyPlugin = new webpack.optimize.UglifyJsPlugin()
+var uglifyPlugin = new webpack.optimize.UglifyJsPlugin();
 
 
 module.exports = {
@@ -71,5 +71,5 @@ function modules(){
       { test: /\.js$/, loader: 'eslint', exclude: /node_modules/ }
     ]
   }
-}
+};
 

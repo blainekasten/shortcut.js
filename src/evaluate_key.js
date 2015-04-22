@@ -6,12 +6,36 @@
  * @returns {String}
  */
 
+var OS_MOD_KEY_NAME = /Mac|iPod|iPhone|iPad/.test(navigator.platform) ? 'meta' : 'ctrl';
+
 export default function(e){
-  var OS_MOD_KEY_NAME = /Mac|iPod|iPhone|iPad/.test(navigator.platform) ? 'meta' : 'ctrl',
-      OS_MAP = {},
+  var OS_MAP = {},
       character;
 
   OS_MAP[OS_MOD_KEY_NAME] = 'mod';
+
+  // grap character for special cases
+  character = specialCases(e.keyCode);
+
+  if (OS_MAP[character]) {
+    // grap character for special cases
+    character = OS_MAP[character];
+  }
+
+  if (!character) {
+    character = String.fromCharCode(e.keyCode || e.charCode).toLowerCase();
+  }
+
+  return character;
+}
+
+
+/*
+ * this maps to readable words that can be used for the shortcut
+ * library
+ */
+function specialCases(keyCode) {
+  var character;
 
   switch(e.keyCode){
     case 224: //firefox meta
@@ -52,12 +76,5 @@ export default function(e){
       break;
   }
 
-  if (OS_MAP[character]) {
-    character = OS_MAP[character];
-  }
-
-  if (!character) {
-    character = String.fromCharCode(e.keyCode || e.charCode).toLowerCase();
-  }
   return character;
 }

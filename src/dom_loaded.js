@@ -18,10 +18,14 @@ import mappings from './mappings';
 
     // Iterate through shortcuts
     for (key in mappings){
+      if (!mappings.hasOwnProperty(key)) { continue; }
+
       elSelectors = mappings[key];
 
       // Iterate through DOM selectors
       for (selectorKey in elSelectors){
+        if (!elSelectors.hasOwnProperty(selectorKey)) { continue; }
+
         el = document.querySelector(selectorKey);
 
         // Report error if no element was not found.

@@ -2,12 +2,12 @@ var noConflictShortcut = window.shortcut,
     globalPause, shortcut;
 
 
-import indexPolyfill from './indexof_polyfill';
+import indexofPolyfill from './indexof_polyfill';
 import globalPause from './global_pause';
 import shortcut from './shortcut';
 import eventBinding from './event_binding';
 
-indexPolyfill();
+indexofPolyfill();
 
 
 /*
