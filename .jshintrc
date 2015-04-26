@@ -1,0 +1,19 @@
+{
+  "bitwise": true,
+  "camelcase": true,
+  "curly": true,
+  "eqeqeq": true,
+  "forin": true,
+  "funcscope": true,
+  "maxdepth": 3,
+  "esnext": true,
+
+
+  "globals": {
+    "jest": true,
+    "describe": true,
+    "it": true,
+    "expect": true,
+    "beforeEach": true
+  }
+}
