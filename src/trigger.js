@@ -13,12 +13,14 @@ export default function(){
       fakeEvent = {preventDefault: function(){}},
       i;
 
-  if (globalPause || this.isPaused){
+  if (globalPause() || this.isPaused){
     return false;
   }
 
   for (i in fns){
-    fns[i](fakeEvent);
+    if (fns.hasOwnProperty(i)) {
+      fns[i](fakeEvent);
+    }
   }
 
   return this;

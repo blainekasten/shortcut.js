@@ -1,4 +1,4 @@
-var noConflictShortcut = window.shortcut,
+var noConflictShortcut,
     globalPause, shortcut;
 
 
@@ -6,8 +6,10 @@ import indexofPolyfill from './indexof_polyfill';
 import globalPause from './global_pause';
 import shortcut from './shortcut';
 import eventBinding from './event_binding';
+import canUseDom from 'can-use-dom';
 
 indexofPolyfill();
+
 
 
 /*
@@ -15,6 +17,8 @@ indexofPolyfill();
  *
  * @chainable
  */
+
+noConflictShortcut = canUseDom ? window.shortcut : this.shortcut;
 
 shortcut.noConflict = function(){
   window.shortcut = noConflictShortcut;

@@ -18,3 +18,4 @@ export default function() {
   // Drops the functions from the mappings
   return this;
 }
+

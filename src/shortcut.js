@@ -13,7 +13,7 @@
 import domLoaded from './dom_loaded.js';
 import mappings from './mappings';
 import pausedMappings from './paused_mappings';
-import bindsToFn from './bind_function';
+import bindsTo from './binds_to';
 import preventDefaultFn from './prevent_default';
 import pauseFn from './pause';
 import resumeFn from './resume';
@@ -44,7 +44,7 @@ export default function(shortcutStr, selector){
 
   // Chaining methods
   return {
-    bindsTo: bindsToFn,
+    bindsTo: bindsTo,
     preventDefault: preventDefaultFn,
     pause: pauseFn,
     resume: resumeFn,

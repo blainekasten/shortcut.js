@@ -4,6 +4,7 @@ import evaluateKey from './evaluate_key';
 import globalPause from './global_pause';
 import mappings from './mappings';
 import shortcut from './shortcut';
+import canUseDom from 'can-use-dom';
 
 /*
  * When a key is pressed, we add it to the internal array, and check if we have any matches to fire functions
@@ -63,7 +64,7 @@ function onKeyUp(e) {
  */
 
 export default function() {
-  if ( !/Mobi/.test(navigator.userAgent) ) {
+  if ( !/Mobi/.test(navigator.userAgent) && canUseDom ) {
     if (window.addEventListener){
       window.addEventListener('keydown', onKeyDown);
       window.addEventListener('keyup', onKeyUp);

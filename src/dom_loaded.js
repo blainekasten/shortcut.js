@@ -4,8 +4,10 @@ var DOM_LOADED = false, called = false,
 
 import error from './error';
 import mappings from './mappings';
+import canUseDom from 'can-use-dom';
 
 (function(){
+  if (!canUseDom) { return; }
   called = false;
 
   function ready() {

@@ -12,7 +12,7 @@ import error from './error';
 export default function (fn){
   // Stop if not a function
   if (typeof fn !== 'function'){
-    return error('You must pass a function to the bindsTo functoin');
+    return error(`You must pass a function to the bindsTo method, check the call for the shortcut('${this.keys}', '${this.selector}') method`);
   }
 
 

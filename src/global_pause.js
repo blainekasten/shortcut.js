@@ -6,7 +6,7 @@
 var globalPause = false;
 
 export default function(setter){
-  if (setter) {
+  if (typeof setter === 'boolean') {
     globalPause = setter;
   }
 

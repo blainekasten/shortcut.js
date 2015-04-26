@@ -14,8 +14,6 @@ results
 npm-debug.log
 
 node_modules/
-dist/
-src/__shortcut.js
 
 *.swo
 *.swp

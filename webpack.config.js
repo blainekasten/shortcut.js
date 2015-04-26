@@ -38,7 +38,7 @@ module.exports = {
   // file using '[name]' in the filename.
   // You will want to add the bundled filename to your '.gitignore'.
   output: {
-    filename: '[name].js',
+    filename: 'shortcut.js',
     // We want to save the bundle in the same directory as the other JS.
     path: __dirname + '/dist',
     library: "shortcut",
@@ -67,7 +67,7 @@ module.exports = {
 function modules(){
   return {
     loaders: [
-      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?optional=runtime'},
       { test: /\.js$/, loader: 'eslint', exclude: /node_modules/ }
     ]
   };

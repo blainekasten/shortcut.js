@@ -6,13 +6,11 @@
  * @returns {String}
  */
 
-var OS_MOD_KEY_NAME = /Mac|iPod|iPhone|iPad/.test(navigator.platform) ? 'meta' : 'ctrl';
-
 export default function(e){
   var OS_MAP = {},
       character;
 
-  OS_MAP[OS_MOD_KEY_NAME] = 'mod';
+  OS_MAP[osModKeyName()] = 'mod';
 
   // grap character for special cases
   character = specialCases(e.keyCode);
@@ -22,6 +20,11 @@ export default function(e){
     character = OS_MAP[character];
   }
 
+
+  /*
+   * if the character doesnt match a special case
+   * we just can trust the charCode lookup method
+   */
   if (!character) {
     character = String.fromCharCode(e.keyCode || e.charCode).toLowerCase();
   }
@@ -37,7 +40,10 @@ export default function(e){
 function specialCases(keyCode) {
   var character;
 
-  switch(e.keyCode){
+  switch(keyCode){
+    case 190:
+      character = '.';
+      break;
     case 224: //firefox meta
       character = 'meta';
       break;
@@ -77,4 +83,10 @@ function specialCases(keyCode) {
   }
 
   return character;
+}
+
+
+function osModKeyName() {
+  return /Mac|iPod|iPhone|iPad/.test(navigator.platform) ?
+    'meta' : 'ctrl';
 }
