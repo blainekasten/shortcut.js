@@ -14,7 +14,7 @@ Features!
 - Global and Individual pause/resume functions
 - Cross OS Key Bindings ('mod' key)
 - CrossBrowser (IE8+, Chrome, FF, Safari Tested)
-- AMD compatibility
+- UMD compatibility
 
 Installation
 ===========
