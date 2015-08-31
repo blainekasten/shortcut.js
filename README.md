@@ -11,7 +11,6 @@ Features!
 ============
 
 - Chainable
-- noConflict mode
 - Global and Individual pause/resume functions
 - Cross OS Key Bindings ('mod' key)
 - CrossBrowser (IE8+, Chrome, FF, Safari Tested)
@@ -29,20 +28,10 @@ How to use
 
     function uppercaseInput(e){...}
     function validateInput(e){...}
-    
+
     shortcut('mod =', 'input#uppercase').bindsTo(uppercaseInput).bindsTo(validateInput);
-    
+
 Here, when a user presses the the modifier key with the equals key, we run an uppercaseInput function, and then a validateInput function.
-
-##### noConflict
-
-If you want to return the global `shortcut` namespace to its previous use, follow this:
-
-    var s = shortcut.noConflict();
-    s('shift = ', 'input#uppercase').bindsTo(uppercaseInput);
-    
-    console.log(shortcut); 
-    // outputs whatever window.shortcut was before the shortcut.js library was loaded
 
 API
 ============
@@ -61,7 +50,7 @@ This function globally pauses all shortcut function dispatching. Keyboard shortc
 Useage:
 
     shortcut.pause();
-    
+ 
 #### +resume()
 
 This function globally resumes all shortcut function dispatching. Keyboard shortcuts pressed after this function WILL fire their associated functions.
@@ -69,7 +58,7 @@ This function globally resumes all shortcut function dispatching. Keyboard short
 Useage:
 
     shortcut.resume();
-    
+
 
 #### -bindsTo(fn)
 
@@ -78,10 +67,10 @@ Useage:
 #### -preventDefault()
 
 A function that prevents default on the current shortcut.
-Usage: 
+Usage:
 
     shortcut('meta a', 'input').bindsTo(uppercaseInput).preventDefault()
-    
+
 This usage would cause cmd + a to not hightlight the input, but rather call the uppercaseInput functions.
 
 #### -trigger()
@@ -100,7 +89,7 @@ A function used to remove bindings to keyboard shortcuts.
 Usage:
 
     shortcut('meta a', 'input').unbind();
-    
+
 Now when a user presses meta a in an input, it will not touch `shortcut` and run its normal native events.
 
 #### -pause()
@@ -110,7 +99,7 @@ Pauses event dispatching for the associated shortcut.
 Usage:
 
     shortcut('meta a', 'input').pause();
-    
+
 When a user presss meta a in an input, it will not fire associated functions. Once `-resume()` is called they will fire.
 
 #### -resume()
@@ -123,7 +112,7 @@ Usage:
     // pressing meta a in an input does nothing
     shortcut('meta a', 'input').resume();
     // pressing meta a dispatches the functions again
-    
+
 When a user presss meta a in an input, it will not fire associated functions. Once `-resume()` is called they will fire.
 
 
