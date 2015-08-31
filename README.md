@@ -3,7 +3,7 @@ shortcut.js [![Code Climate](https://codeclimate.com/github/blainekasten/shortcu
 ============
 
 
-Ever wanted to add keyboard shortcuts to your website? but couldnt justify the time to develop it?
+Ever wanted to add keyboard shortcuts to your website, but couldnt justify the time to develop it?
 
 Shortcut.js gives you easy access to add shortcuts to your already existing functions.
 
