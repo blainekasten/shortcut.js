@@ -4,7 +4,6 @@ import evaluateKey from './evaluate_key';
 import globalPause from './global_pause';
 import mappings from './mappings';
 import shortcut from './shortcut';
-import canUseDom from 'can-use-dom';
 
 /*
  * When a key is pressed, we add it to the internal array, and check if we have any matches to fire functions
@@ -13,7 +12,7 @@ import canUseDom from 'can-use-dom';
  */
 
 function onKeyDown(e) {
-  var selector = e.srcElement ? e.srcElement.selector : e.target.selector,
+  var domNode = e.srcElement || e.target.selector,
       downKeyString, i, shortcutInstance, shortcutFns;
 
   downKeys.push(evaluateKey(e));
@@ -27,7 +26,8 @@ function onKeyDown(e) {
   }
 
 
-  shortcutInstance = shortcut(downKeyString, selector);
+  shortcutInstance = shortcut(downKeyString, domNode);
+  console.log(shortcutInstance);
   shortcutFns = shortcutInstance.functions();
 
   if (shortcutFns.length){
@@ -64,7 +64,7 @@ function onKeyUp(e) {
  */
 
 export default function() {
-  if ( !/Mobi/.test(navigator.userAgent) && canUseDom ) {
+  if ( !/Mobi/.test(navigator.userAgent)) {
     if (window.addEventListener){
       window.addEventListener('keydown', onKeyDown);
       window.addEventListener('keyup', onKeyUp);

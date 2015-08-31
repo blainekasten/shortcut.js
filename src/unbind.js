@@ -8,7 +8,7 @@
 import mappings from './mappings';
 
 export default function(){
-  mappings[this.keys][this.selector] = [];
+  mappings[this.keys][this.domNode] = [];
 
   return this;
 }

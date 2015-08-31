@@ -13,14 +13,6 @@
     "objectLiteralShorthandProperties": true
   },
   "rules": {
-    /*"quotes": "single",*/
-    /*"no-underscore-dangle": false,*/
-    /*"no-mixed-requires": false,*/
-    /*"no-use-before-define": false,*/
-    /*"new-cap": false,*/
-    /*"strict": false,*/
-    /*"block-scoped-var": true,*/
-
     "no-alert": 2,
     "no-array-constructor": 2,
     "no-caller": 2,

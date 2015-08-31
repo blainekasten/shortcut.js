@@ -10,49 +10,42 @@
  * @returns Object
  */
 
-import domLoaded from './dom_loaded.js';
 import mappings from './mappings';
 import pausedMappings from './paused_mappings';
 import bindsTo from './binds_to';
-import preventDefaultFn from './prevent_default';
-import pauseFn from './pause';
-import resumeFn from './resume';
-import unbindFn from './unbind';
-import triggerFn from './trigger';
+import preventDefault from './prevent_default';
+import pause from './pause';
+import resume from './resume';
+import unbind from './unbind';
+import trigger from './trigger';
 
 
-export default function(shortcutStr, selector){
-  var el, isPaused;
+export default function(shortcutStr, domNode){
+  var isPaused;
 
   if (!shortcutStr || typeof shortcutStr !== 'string'){ return false; }
 
-  selector = selector || 'body'; // Defaults to body
+  domNode = domNode || document.body;
 
   // check if element and keys exists in mappings
   if (mappings[shortcutStr] === undefined){ mappings[shortcutStr] = {}; }
-  if (mappings[shortcutStr][selector] === undefined){ mappings[shortcutStr][selector] = []; }
+  if (mappings[shortcutStr][domNode] === undefined){ mappings[shortcutStr][domNode] = []; }
 
-
-  // Make sure elements get the selector tied to it
-  if (domLoaded()){
-    el = document.querySelector(selector);
-    if (el){ el.selector = selector; }
-  }
 
   // decides if the shortcut is paused
-  isPaused = pausedMappings[shortcutStr] === selector ? true : false;
+  isPaused = pausedMappings[shortcutStr] === domNode ? true : false;
 
   // Chaining methods
   return {
-    bindsTo: bindsTo,
-    preventDefault: preventDefaultFn,
-    pause: pauseFn,
-    resume: resumeFn,
-    trigger: triggerFn,
-    unbind: unbindFn,
-    isPaused: isPaused,
+    bindsTo,
+    preventDefault,
+    pause,
+    resume,
+    trigger,
+    unbind,
+    isPaused,
     keys: shortcutStr,
-    selector: selector,
-    functions: () => mappings[shortcutStr][selector]
+    domNode,
+    functions: () => mappings[shortcutStr][domNode]
   };
 }

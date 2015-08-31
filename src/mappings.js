@@ -4,7 +4,7 @@
  *
  * mappings = {
  *   'meta shift 8' : {
- *     '.selector' : [
+ *     DOMNode : [
  *       function(){...},
  *       function(){...}
  *     ]

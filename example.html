@@ -1,26 +1,11 @@
 <head>
   <!--<script src='dist/KeyHolder.js'></script>-->
   <meta http-equiv="X-UA-Compatible" content="IE=8">
+  <meta charset="UTF-8">
   <script>
     window.shortcut = 'hello';
   </script>
-  <script src='shortcut.js'></script>
-  <script>
-    var phonefn = function(e){
-      el = e.target || e.srcElement;
-      el.value = "You did it!";
-    };
-    var windowfn = function(e){
-      alert('Congrats! You pressed shift 1 somewhere in the window.');
-    };
-
-    var s = shortcut;//.noConflict();
-
-    s('mod a', '#phone').bindsTo(phonefn).preventDefault();
-    s('shift 1').bindsTo(windowfn);
-
-    //console.log("SHORTCUT.JS: " + shortcut + " Should be 'hello'. If not, noConflict is failing");
-  </script>
+  <script src='dist/shortcut.js'></script>
 </head>
 
 <h3> SHORTCUT </h3>
@@ -28,6 +13,24 @@
 <input id='phone' />
 
 <p> This page has keyboard shortcuts via the shorcut library. </p>
-<p> It is instantiated by <pre><code>shortcut('mod a').bindsTo(function(){...});</code></pre>
+<p> It is instantiated by <pre><code>shortcut('mod a', DOMNode).bindsTo(function(){...});</code></pre>
 <p> Test out pressing shift + 1 anywhere in the window. </p>
 <p> or mod + a in the phone field. </p>
+
+<script>
+  var phonefn = function(e){
+    el = e.target || e.srcElement;
+    el.value = "You did it!";
+  };
+
+  var windowfn = function(e){
+    alert('Congrats! You pressed shift 1 somewhere in the window.');
+  };
+
+  var s = shortcut.noConflict();
+
+  s('mod a', document.getElementById('phone')).bindsTo(phonefn).preventDefault();
+  s('shift 1').bindsTo(windowfn);
+
+  console.log("SHORTCUT.JS: " + shortcut + " Should be 'hello'. If not, noConflict is failing");
+</script>
