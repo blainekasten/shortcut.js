@@ -54,13 +54,6 @@ describe('shortcut.js', function(){
     expect(testFn1).not.toHaveBeenCalled()
   });
 
-  // No Conflict mode
-  it('should properly utilize noConflict()', function(){
-    var s = shortcut.noConflict();
-    expect(shortcut).toBeUndefined();
-    window.shortcut = s;
-  });
-
   // Global pause
   it('should pause every dispatch when the global pause is called', function(){
     shortcut.pause();
