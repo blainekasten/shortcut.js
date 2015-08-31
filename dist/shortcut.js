@@ -76,27 +76,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _shortcut2 = _interopRequireDefault(_shortcut);
 
-	var _event_binding = __webpack_require__(20);
+	var _event_binding = __webpack_require__(18);
 
 	var _event_binding2 = _interopRequireDefault(_event_binding);
 
-	var global = self,
-	    noConflictShortcut;
-
 	(0, _indexof_polyfill2['default'])();
-
-	/*
-	 * NO CONFLICT function
-	 *
-	 * @chainable
-	 */
-
-	noConflictShortcut = global.shortcut;
-
-	_shortcut2['default'].noConflict = function () {
-	  global.shortcut = noConflictShortcut;
-	  return this;
-	};
 
 	/*
 	 * A pause function. This prevents anything from being registered or called
@@ -361,35 +345,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _mappings = __webpack_require__(11);
+	var _mappings = __webpack_require__(10);
 
 	var _mappings2 = _interopRequireDefault(_mappings);
 
-	var _paused_mappings = __webpack_require__(13);
+	var _paused_mappings = __webpack_require__(11);
 
 	var _paused_mappings2 = _interopRequireDefault(_paused_mappings);
 
-	var _binds_to = __webpack_require__(14);
+	var _binds_to = __webpack_require__(12);
 
 	var _binds_to2 = _interopRequireDefault(_binds_to);
 
-	var _prevent_default = __webpack_require__(15);
+	var _prevent_default = __webpack_require__(9);
 
 	var _prevent_default2 = _interopRequireDefault(_prevent_default);
 
-	var _pause = __webpack_require__(16);
+	var _pause = __webpack_require__(14);
 
 	var _pause2 = _interopRequireDefault(_pause);
 
-	var _resume = __webpack_require__(17);
+	var _resume = __webpack_require__(15);
 
 	var _resume2 = _interopRequireDefault(_resume);
 
-	var _unbind = __webpack_require__(18);
+	var _unbind = __webpack_require__(16);
 
 	var _unbind2 = _interopRequireDefault(_unbind);
 
-	var _trigger = __webpack_require__(19);
+	var _trigger = __webpack_require__(17);
 
 	var _trigger2 = _interopRequireDefault(_trigger);
 
@@ -433,124 +417,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 9 */,
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _Object$defineProperty = __webpack_require__(2)["default"];
-
-	_Object$defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports["default"] = function (msg) {
-	  throw new Error(msg);
-	};
-
-	module.exports = exports["default"];
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * A nested hash of element to keys to functions.
-	 * For example this may look like (once populated)
-	 *
-	 * mappings = {
-	 *   'meta shift 8' : {
-	 *     DOMNode : [
-	 *       function(){...},
-	 *       function(){...}
-	 *     ]
-	 *   }
-	 *
-	 * @type {Object}
-	 */
-
-	"use strict";
-
-	var _Object$defineProperty = __webpack_require__(2)["default"];
-
-	_Object$defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports["default"] = {};
-	module.exports = exports["default"];
-
-/***/ },
-/* 12 */,
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	/*
-	 * A hash of paused shortcut strings to element selectors
-	 * A set in here is considered paused
-	 *
-	 * @type {Object}
-	 */
-
-	"use strict";
-
-	var _Object$defineProperty = __webpack_require__(2)["default"];
-
-	_Object$defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports["default"] = {};
-	module.exports = exports["default"];
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * This function is the chainable function typically called to add a function to the internal
-	 * array of functions bound to an element
-	 *
-	 * @params {Function}
-	 * @returns {Object} Chainable.
-	 */
-
-	'use strict';
-
-	var _Object$defineProperty = __webpack_require__(2)['default'];
-
-	var _interopRequireDefault = __webpack_require__(6)['default'];
-
-	_Object$defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	var _mappings = __webpack_require__(11);
-
-	var _mappings2 = _interopRequireDefault(_mappings);
-
-	var _error = __webpack_require__(10);
-
-	var _error2 = _interopRequireDefault(_error);
-
-	exports['default'] = function (fn) {
-	  // Stop if not a function
-	  if (typeof fn !== 'function') {
-	    return (0, _error2['default'])('You must pass a function to the bindsTo method, check the call for the shortcut(\'' + this.keys + '\', \'' + this.domNode.name + '\') method');
-	  }
-
-	  _mappings2['default'][this.keys][this.domNode].push(fn);
-
-	  // Return this for chaning
-	  return this;
-	};
-
-	module.exports = exports['default'];
-
-/***/ },
-/* 15 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -584,7 +451,122 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 16 */
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * A nested hash of element to keys to functions.
+	 * For example this may look like (once populated)
+	 *
+	 * mappings = {
+	 *   'meta shift 8' : {
+	 *     DOMNode : [
+	 *       function(){...},
+	 *       function(){...}
+	 *     ]
+	 *   }
+	 *
+	 * @type {Object}
+	 */
+
+	"use strict";
+
+	var _Object$defineProperty = __webpack_require__(2)["default"];
+
+	_Object$defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports["default"] = {};
+	module.exports = exports["default"];
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/*
+	 * A hash of paused shortcut strings to element selectors
+	 * A set in here is considered paused
+	 *
+	 * @type {Object}
+	 */
+
+	"use strict";
+
+	var _Object$defineProperty = __webpack_require__(2)["default"];
+
+	_Object$defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports["default"] = {};
+	module.exports = exports["default"];
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * This function is the chainable function typically called to add a function to the internal
+	 * array of functions bound to an element
+	 *
+	 * @params {Function}
+	 * @returns {Object} Chainable.
+	 */
+
+	'use strict';
+
+	var _Object$defineProperty = __webpack_require__(2)['default'];
+
+	var _interopRequireDefault = __webpack_require__(6)['default'];
+
+	_Object$defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _mappings = __webpack_require__(10);
+
+	var _mappings2 = _interopRequireDefault(_mappings);
+
+	var _error = __webpack_require__(13);
+
+	var _error2 = _interopRequireDefault(_error);
+
+	exports['default'] = function (fn) {
+	  // Stop if not a function
+	  if (typeof fn !== 'function') {
+	    return (0, _error2['default'])('You must pass a function to the bindsTo method, check the call for the shortcut(\'' + this.keys + '\', \'' + this.domNode.name + '\') method');
+	  }
+
+	  _mappings2['default'][this.keys][this.domNode].push(fn);
+
+	  // Return this for chaning
+	  return this;
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _Object$defineProperty = __webpack_require__(2)["default"];
+
+	_Object$defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports["default"] = function (msg) {
+	  throw new Error(msg);
+	};
+
+	module.exports = exports["default"];
+
+/***/ },
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -604,7 +586,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _paused_mappings = __webpack_require__(13);
+	var _paused_mappings = __webpack_require__(11);
 
 	var _paused_mappings2 = _interopRequireDefault(_paused_mappings);
 
@@ -623,7 +605,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 17 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -643,7 +625,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _paused_mappings = __webpack_require__(13);
+	var _paused_mappings = __webpack_require__(11);
 
 	var _paused_mappings2 = _interopRequireDefault(_paused_mappings);
 
@@ -661,7 +643,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 18 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -681,7 +663,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _mappings = __webpack_require__(11);
+	var _mappings = __webpack_require__(10);
 
 	var _mappings2 = _interopRequireDefault(_mappings);
 
@@ -694,7 +676,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 19 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -740,7 +722,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 20 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -753,7 +735,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _evaluate_key = __webpack_require__(21);
+	var _evaluate_key = __webpack_require__(19);
 
 	var _evaluate_key2 = _interopRequireDefault(_evaluate_key);
 
@@ -761,7 +743,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _global_pause2 = _interopRequireDefault(_global_pause);
 
-	var _mappings = __webpack_require__(11);
+	var _mappings = __webpack_require__(10);
 
 	var _mappings2 = _interopRequireDefault(_mappings);
 
@@ -844,7 +826,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 21 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	

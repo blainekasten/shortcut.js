@@ -37,10 +37,6 @@ module.exports = {
   // The 'module' and 'loaders' options tell webpack to use loaders.
   // @see http://webpack.github.io/docs/using-loaders.html
   module: modules(),
-
-  resolve: {
-    extensions: '.js'
-  }
 };
 
 
