@@ -1,7 +1,7 @@
 {
   "name": "shortcut.js",
   "main": "dist/shortcut.js",
-  "version": "1.5.5",
+  "version": "2.0.0-rc1",
   "homepage": "https://github.com/blainekasten/shortcut.js",
   "authors": [
     "blainekasten <blainekasten@gmail.com>"

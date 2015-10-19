@@ -20,6 +20,7 @@ Installation
 ===========
 
 `bower install shortcut`
+`npm install shortcut.js`
 
 How to use
 ===========
