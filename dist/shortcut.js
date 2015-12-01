@@ -201,21 +201,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @providesModule Error
 	 */
 
-	"use strict";
+	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
+	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	exports["default"] = globalPause;
+	exports['default'] = globalPause;
 	var globalPause = false;
 
 	function globalPause(setter) {
-	  exports.globalPause = globalPause = setter;
+	  if (typeof setter === 'boolean') {
+	    exports.globalPause = globalPause = setter;
+	  }
 
 	  return globalPause;
 	}
 
-	module.exports = exports["default"];
+	module.exports = exports['default'];
 
 /***/ },
 /* 4 */

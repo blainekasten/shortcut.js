@@ -15,7 +15,9 @@
 let globalPause: boolean = false;
 
 export default function globalPause(setter: boolean) : boolean {
-  globalPause = setter;
+  if (typeof setter === 'boolean') {
+    globalPause = setter;
+  }
 
   return globalPause;
 }
