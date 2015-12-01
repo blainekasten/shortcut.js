@@ -1,6 +1,6 @@
 {
   "name": "shortcut.js",
-  "version": "2.0.0-rc1",
+  "version": "2.0.0-rc2",
   "main": "./dist/shortcut.js",
   "author": "Blaine Kasten <blainekasten@gmail.com>",
   "keywords": [
@@ -41,5 +41,9 @@
   },
   "scripts": {
     "test": "./node_modules/gulp/bin/gulp.js test"
+  },
+  "dependencies": {
+    "babel-eslint": "^3.1.30",
+    "eslint-plugin-react": "^3.11.2"
   }
 }

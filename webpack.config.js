@@ -47,7 +47,7 @@ function modules(){
   return {
     loaders: [
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?optional=runtime'},
-      { test: /\.js$/, loader: 'eslint', exclude: /node_modules/ }
+      //{ test: /\.js$/, loader: 'eslint', exclude: /node_modules/ }
     ]
   };
 }

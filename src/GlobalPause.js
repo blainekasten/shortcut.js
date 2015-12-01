@@ -6,16 +6,16 @@
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  *
- * Unbinds a shortcut
- * @chainable
+ * defaults to false,
+ * essentially says if any fns should be emitted or not
  *
- * @providesModule Unbind
+ * @providesModule Error
  */
 
-import mappings from './Mappings';
+let globalPause: boolean = false;
 
-export default function unbind() : void {
-  mappings[this.keys][this.domNode] = [];
+export default function globalPause(setter: boolean) : boolean {
+  globalPause = setter;
 
-  return this;
+  return globalPause;
 }

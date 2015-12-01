@@ -1,19 +1,23 @@
-
-/*
+/**
+ * Copyright 2015-2016, Blaine Kasten
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
  * Takes EventData and returns a character string
  *
- * @params {Event}
- * @returns {String}
+ * @providesModule EvaluateKey
  */
 
-export default function(e){
-  var OS_MAP = {},
-      character;
-
-  OS_MAP[osModKeyName()] = 'mod';
+export default function evaluateKey(e: Event) : string {
+  const OS_MAP: Object = {
+    [osModKeyName()]: 'mod',
+  };
 
   // grap character for special cases
-  character = specialCases(e.keyCode);
+  let character: string = specialCases(e.keyCode);
 
   if (OS_MAP[character]) {
     // grap character for special cases
@@ -37,8 +41,8 @@ export default function(e){
  * this maps to readable words that can be used for the shortcut
  * library
  */
-function specialCases(keyCode) {
-  var character;
+function specialCases(keyCode: string) : string {
+  let character: string;
 
   switch(keyCode){
     case 190:
@@ -86,7 +90,7 @@ function specialCases(keyCode) {
 }
 
 
-function osModKeyName() {
+function osModKeyName() : string {
   return /Mac|iPod|iPhone|iPad/.test(navigator.platform) ?
     'meta' : 'ctrl';
 }

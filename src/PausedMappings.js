@@ -6,16 +6,12 @@
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  *
- * Unbinds a shortcut
- * @chainable
+ * A hash of paused shortcut strings to element selectors
+ * A set in here is considered paused
  *
- * @providesModule Unbind
+ * @type {Object}
+ *
+ * @providesModule Mapping
  */
 
-import mappings from './Mappings';
-
-export default function unbind() : void {
-  mappings[this.keys][this.domNode] = [];
-
-  return this;
-}
+export default {};

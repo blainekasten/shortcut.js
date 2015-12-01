@@ -1,51 +1,55 @@
-/*
+/**
+ * Copyright 2015-2016, Blaine Kasten
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
  * Entry function.
  *
  * usage:
- *  shortcut('a b', 'body').to(myMethod)
+ *  shortcut('a b', HTMLElement).bindsTo(myMethod)
  *
- * @params {String} keys to press
- * @params {String} dom selector
- *
- * @returns Object
+ * @providesModule Resume
  */
 
-import mappings from './mappings';
-import pausedMappings from './paused_mappings';
-import bindsTo from './binds_to';
-import preventDefault from './prevent_default';
-import pause from './pause';
-import resume from './resume';
-import unbind from './unbind';
-import trigger from './trigger';
+import mappings from './Mappings';
+import pausedMappings from './PausedMappings';
+import bindsTo from './BindsTo';
+import preventDefault from './PreventDefault';
+import pause from './Pause';
+import resume from './Resume';
+import unbind from './Unbind';
+import trigger from './Trigger';
 
 
-export default function(shortcutStr, domNode){
-  var isPaused;
+export default function shortcut(shortcutStr: string, domNode: HTMLElement) : object {
+  // TODO: Throw error if domNode is undefined
 
-  if (!shortcutStr || typeof shortcutStr !== 'string'){ return false; }
-
-  domNode = domNode || document.body;
+  if (!shortcutStr || typeof shortcutStr !== 'string'){
+    // TODO: Throw invariant error
+    return {};
+  }
 
   // check if element and keys exists in mappings
   if (mappings[shortcutStr] === undefined){ mappings[shortcutStr] = {}; }
   if (mappings[shortcutStr][domNode] === undefined){ mappings[shortcutStr][domNode] = []; }
 
-
   // decides if the shortcut is paused
-  isPaused = pausedMappings[shortcutStr] === domNode ? true : false;
+  const isPaused: boolean = pausedMappings[shortcutStr] === domNode ? true : false;
 
   // Chaining methods
   return {
     bindsTo,
-    preventDefault,
+    domNode,
+    functions: () => mappings[shortcutStr][domNode],
+    isPaused,
+    keys: shortcutStr,
     pause,
+    preventDefault,
     resume,
     trigger,
     unbind,
-    isPaused,
-    keys: shortcutStr,
-    domNode,
-    functions: () => mappings[shortcutStr][domNode]
   };
 }
