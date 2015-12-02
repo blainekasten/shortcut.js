@@ -15,83 +15,27 @@ import mappings from './Mappings';
 import shortcut from './Shortcut';
 
 const downKeys: Array<string> = [];
-let skipPush: boolean = false;
 
 /*
  * When a key is pressed, we add it to the internal array, and check if we have any matches to fire functions
  */
-function onKeyDown(e: Event) : void {
+function onKeyDown(e: KeyboardEvent) : void {
   if (globalPause()) {
-    return bubble(e);
+    return;
   }
 
-  console.log(skipPush);
+  downKeys.push(evaluateKey(e));
 
-  if (!skipPush) {
-    console.log('pushing keys');
-    downKeys.push(evaluateKey(e));
-  }
-
-  const downKeyString: String = downKeys.join(' ');
+  const downKeyString: string = downKeys.join(' ');
   const domNode: HTMLElement = e.target;
 
   // there is no shortcut bound for this set of
   // keys pressed, so stop
   if (mappings[downKeyString] === undefined){
-    return bubble(e);
-  }
-
-  const shortcutInstance: Object = shortcut(downKeyString, domNode);
-
-  // shortcut is paused, so stop
-  if (shortcutInstance.isPaused) {
-    return bubble(e);
-  }
-
-  const shortcutFns: Array<Function> = shortcutInstance.functions();
-
-  // Call functions
-  for (const i in shortcutFns){
-    if (shortcutFns.hasOwnProperty(i)) {
-      shortcutFns[i](e);
-    }
-  }
-
-  return bubble(e);
-}
-
-
-/*
- * Bubbles the event up the tree so multiple
- * listeners can be triggered by events
- *
- * TODO: Research if this will ever hit a case other than
- *   `document.body`. Potentially more performant to just bubble
- *   straight to `body`
- */
-function bubble(e: Event) : void {
-  skipPush = true;
-
-  if (e.target.nodeName === 'BODY') {
     return;
   }
 
-  const newEvent = document.createEvent('KeyboardEvent')
-  const {
-    key, code, location, ctrlKey, shiftKey,
-    altKey, metaKey, isComposing, charCode,
-    keyCode, which,
-  } = e;
-
-
-  const event: KeyboardEvent = new KeyboardEvent(
-    'keydown', {
-    key, code, location, ctrlKey, shiftKey,
-    altKey, metaKey, isComposing, charCode,
-    keyCode, which,
-  });
-
-  e.target.parentElement.dispatchEvent(event);
+  callShortcutFunctions(downKeyString, domNode, e);
 }
 
 
@@ -100,7 +44,6 @@ function bubble(e: Event) : void {
  */
 
 function onKeyUp(e: Event) : void {
-  skipPush = false;
   if (globalPause()) {
     return;
   }
@@ -111,6 +54,43 @@ function onKeyUp(e: Event) : void {
     downKeys.splice(index, 1);
   }
 }
+
+
+/*
+ * calls the shortcut function and bubbles
+ * to the document.body
+ *
+ * until we hear of a case for needing to do proper bubbling, I think
+ * this should be efficient and sufficient.
+ */
+export function callShortcutFunctions(downKeyString: string, domNode: HTMLElement, e: KeyboardEvent) : void {
+  const shortcutInstance: Object = shortcut(downKeyString, domNode);
+
+  // shortcut is paused, so stop
+  if (shortcutInstance.isPaused) {
+    return;
+  }
+
+  const shortcutFns: Array<Function> = shortcutInstance.functions();
+  let allowPropagationToBody: boolean = true;
+
+  e.stopPropagation = function() {
+    allowPropagationToBody = false;
+  }
+
+  // Call functions
+  for (const i in shortcutFns){
+    if (shortcutFns.hasOwnProperty(i)) {
+      shortcutFns[i](e)
+    }
+  }
+
+  // only bubble to document.body
+  if (domNode !== document.body && allowPropagationToBody) {
+    callShortcutFunctions(downKeyString, document.body, e);
+  }
+}
+
 
 
 

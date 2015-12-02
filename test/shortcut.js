@@ -50,12 +50,6 @@ describe('shortcut.js', function(){
     expect(phoneFn).not.toHaveBeenCalled()
   });
 
-  // element bindings
-  it('should not fire window functions when a second paramater is passed', function(){
-    shortcut('e', document.querySelector('#phone')).trigger()
-    expect(testFn1).not.toHaveBeenCalled()
-  });
-
   // Global pause
   it('should pause every dispatch when the global pause is called', function(){
     shortcut.pause();
@@ -151,11 +145,36 @@ describe('shortcut.js', function(){
     );
   });
 
-  it('should prevent bubbling for stopProgation', function() {
-    // this should be failing
+  it('should prevent bubbling for stopPropagation', function() {
+    var bodyFn = jasmine.createSpy('bodyFn');
+    shortcut('f', this.phoneNode).bindsTo(function(e){ console.log(e); e.stopPropagation(); })
+    shortcut('f', document.body).bindsTo(bodyFn);
+
     shortcut('f', this.phoneNode).trigger();
 
-    expect(testFn1).not.toHaveBeenCalled();
+    expect(bodyFn).not.toHaveBeenCalled();
+  });
+
+
+  it('should bubble to the body naturally', function() {
+    var bodyFn = jasmine.createSpy('bodyFn');
+    shortcut('g', this.phoneNode).bindsTo(function(){});
+    shortcut('g', document.body).bindsTo(bodyFn);
+
+    shortcut('g', this.phoneNode).trigger();
+
+    expect(bodyFn).toHaveBeenCalled();
+  });
+
+
+  it('should prevent bubbling for with sugar stopPropagation method', function() {
+    var bodyFn = jasmine.createSpy('bodyFn');
+    shortcut('h', this.phoneNode).stopPropagation();
+    shortcut('h', document.body).bindsTo(bodyFn);
+
+    shortcut('h', this.phoneNode).trigger();
+
+    expect(bodyFn).not.toHaveBeenCalled();
   });
 
 });
