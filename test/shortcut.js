@@ -12,12 +12,15 @@ describe('shortcut.js', function(){
 
     $(document.body).append('<input id="phone"></input>');
 
+    this.phoneNode = document.querySelector('#phone');
+
     shortcut('a', document.body).bindsTo(testFn1).bindsTo(testFn2);
     shortcut('b', document.body).bindsTo(testFn1);
     shortcut('c', document.body).bindsTo(testFn2);
     shortcut('d', document.body).bindsTo(testFn2).preventDefault();
-    shortcut('e', document.querySelector('#phone')).bindsTo(phoneFn);
+    shortcut('e', this.phoneNode).bindsTo(phoneFn);
     shortcut('e', document.body).bindsTo(testFn1);
+    shortcut('f', this.phoneNode)//.stopPropagation();
   });
 
   afterEach(function(){
@@ -25,11 +28,10 @@ describe('shortcut.js', function(){
     shortcut('b', document.body).unbind();
     shortcut('c', document.body).unbind();
     shortcut('d', document.body).unbind();
-    shortcut('e', document.querySelector('#phone')).unbind();
+    shortcut('e', this.phoneNode).unbind();
     shortcut('e', document.body).unbind();
+    shortcut('f', this.phoneNode).unbind();
   });
-
-
 
 
   // Multple functions to one shortcut
@@ -147,6 +149,13 @@ describe('shortcut.js', function(){
     ).toThrow(
       new Error("You must pass a function to the bindsTo method, check the call for the shortcut('a', 'undefined') method")
     );
+  });
+
+  it('should prevent bubbling for stopProgation', function() {
+    // this should be failing
+    shortcut('f', this.phoneNode).trigger();
+
+    expect(testFn1).not.toHaveBeenCalled();
   });
 
 });

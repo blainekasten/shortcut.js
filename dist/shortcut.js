@@ -264,6 +264,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _PreventDefault2 = _interopRequireDefault(_PreventDefault);
 
+	var _StopPropagation = __webpack_require__(20);
+
+	var _StopPropagation2 = _interopRequireDefault(_StopPropagation);
+
 	var _Pause = __webpack_require__(10);
 
 	var _Pause2 = _interopRequireDefault(_Pause);
@@ -285,14 +289,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _Error2 = _interopRequireDefault(_Error);
 
 	function shortcut(shortcutStr, domNode) {
-	  // TODO: Throw error if domNode is undefined
+
+	  // Should we envify these?
 	  if (!domNode || domNode.ELEMENT_NODE !== 1) {
 	    return (0, _Error2['default'])('You must pass a function as a second argument to \'shortcut(string, domNode)\'. Check the definition of \'shortcut("' + shortcutStr + '", ' + domNode + ')');
 	  }
 
 	  if (!shortcutStr || typeof shortcutStr !== 'string') {
-	    // TODO: Throw invariant error
-	    return {};
+	    return (0, _Error2['default'])('You must pass a string as your first argument to \'shortcut(string, domNode)\'. Check the definition of \'shortcut("' + shortcutStr + '", ' + domNode + ')');
 	  }
 
 	  // check if element and keys exists in mappings
@@ -317,6 +321,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    keys: shortcutStr,
 	    pause: _Pause2['default'],
 	    preventDefault: _PreventDefault2['default'],
+	    stopPropagation: _StopPropagation2['default'],
 	    resume: _Resume2['default'],
 	    trigger: _Trigger2['default'],
 	    unbind: _Unbind2['default']
@@ -731,36 +736,86 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _Shortcut2 = _interopRequireDefault(_Shortcut);
 
 	var downKeys = [];
+	var skipPush = false;
 
 	/*
 	 * When a key is pressed, we add it to the internal array, and check if we have any matches to fire functions
 	 */
 	function onKeyDown(e) {
-	  downKeys.push((0, _EvaluateKey2['default'])(e));
+	  if ((0, _GlobalPause2['default'])()) {
+	    return bubble(e);
+	  }
+
+	  console.log(skipPush);
+
+	  if (!skipPush) {
+	    console.log('pushing keys');
+	    downKeys.push((0, _EvaluateKey2['default'])(e));
+	  }
 
 	  var downKeyString = downKeys.join(' ');
 	  var domNode = e.target;
 
-	  // Do nothing during globalPause, shortcut pause
-	  // or if we do not have that mapping, return
-	  if ((0, _GlobalPause2['default'])() || _Mappings2['default'][downKeyString] === undefined) {
-	    return;
+	  // there is no shortcut bound for this set of
+	  // keys pressed, so stop
+	  if (_Mappings2['default'][downKeyString] === undefined) {
+	    return bubble(e);
 	  }
 
 	  var shortcutInstance = (0, _Shortcut2['default'])(downKeyString, domNode);
+
+	  // shortcut is paused, so stop
+	  if (shortcutInstance.isPaused) {
+	    return bubble(e);
+	  }
+
 	  var shortcutFns = shortcutInstance.functions();
 
-	  // we have a match, time to react
-	  if (shortcutFns.length) {
-	    if (shortcutInstance.isPaused) {
-	      return;
-	    }
-
-	    // Call functions
-	    for (var i in shortcutFns) {
+	  // Call functions
+	  for (var i in shortcutFns) {
+	    if (shortcutFns.hasOwnProperty(i)) {
 	      shortcutFns[i](e);
 	    }
 	  }
+
+	  return bubble(e);
+	}
+
+	/*
+	 * Bubbles the event up the tree so multiple
+	 * listeners can be triggered by events
+	 *
+	 * TODO: Research if this will ever hit a case other than
+	 *   `document.body`. Potentially more performant to just bubble
+	 *   straight to `body`
+	 */
+	function bubble(e) {
+	  skipPush = true;
+
+	  if (e.target.nodeName === 'BODY') {
+	    return;
+	  }
+
+	  var newEvent = document.createEvent('KeyboardEvent');
+	  var key = e.key;
+	  var code = e.code;
+	  var location = e.location;
+	  var ctrlKey = e.ctrlKey;
+	  var shiftKey = e.shiftKey;
+	  var altKey = e.altKey;
+	  var metaKey = e.metaKey;
+	  var isComposing = e.isComposing;
+	  var charCode = e.charCode;
+	  var keyCode = e.keyCode;
+	  var which = e.which;
+
+	  var event = new KeyboardEvent('keydown', {
+	    key: key, code: code, location: location, ctrlKey: ctrlKey, shiftKey: shiftKey,
+	    altKey: altKey, metaKey: metaKey, isComposing: isComposing, charCode: charCode,
+	    keyCode: keyCode, which: which
+	  });
+
+	  e.target.parentElement.dispatchEvent(event);
 	}
 
 	/*
@@ -768,6 +823,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	function onKeyUp(e) {
+	  skipPush = false;
+	  if ((0, _GlobalPause2['default'])()) {
+	    return;
+	  }
+
 	  var index = downKeys.indexOf((0, _EvaluateKey2['default'])(e));
 
 	  if (index !== -1) {
@@ -962,6 +1022,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	  getSymbols: $Object.getOwnPropertySymbols,
 	  each:       [].forEach
 	};
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2015-2016, Blaine Kasten
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * Makes a key binding preventDefault
+	 * @chainable
+	 *
+	 * @providesModule PreventDefault
+	 */
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports["default"] = stopPropagation;
+
+	function stopPropagation() {
+	  function _stopPropagation(e) {
+	    if (e.stopPropagation) {
+	      e.stopPropagation();
+	    }
+	    return false; // Safari Prevent Default
+	  };
+
+	  this.bindsTo(_stopPropagation);
+
+	  return this;
+	}
+
+	module.exports = exports["default"];
 
 /***/ }
 /******/ ])

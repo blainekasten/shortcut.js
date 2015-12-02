@@ -15,38 +15,83 @@ import mappings from './Mappings';
 import shortcut from './Shortcut';
 
 const downKeys: Array<string> = [];
+let skipPush: boolean = false;
 
 /*
  * When a key is pressed, we add it to the internal array, and check if we have any matches to fire functions
  */
 function onKeyDown(e: Event) : void {
-  downKeys.push(evaluateKey(e));
+  if (globalPause()) {
+    return bubble(e);
+  }
+
+  console.log(skipPush);
+
+  if (!skipPush) {
+    console.log('pushing keys');
+    downKeys.push(evaluateKey(e));
+  }
 
   const downKeyString: String = downKeys.join(' ');
   const domNode: HTMLElement = e.target;
 
-  // Do nothing during globalPause, shortcut pause
-  // or if we do not have that mapping, return
-  if (globalPause() ||
-      mappings[downKeyString] === undefined
-     ){
-    return;
+  // there is no shortcut bound for this set of
+  // keys pressed, so stop
+  if (mappings[downKeyString] === undefined){
+    return bubble(e);
   }
 
   const shortcutInstance: Object = shortcut(downKeyString, domNode);
+
+  // shortcut is paused, so stop
+  if (shortcutInstance.isPaused) {
+    return bubble(e);
+  }
+
   const shortcutFns: Array<Function> = shortcutInstance.functions();
 
-  // we have a match, time to react
-  if (shortcutFns.length){
-    if (shortcutInstance.isPaused){
-      return;
-    }
-
-    // Call functions
-    for (const i in shortcutFns){
+  // Call functions
+  for (const i in shortcutFns){
+    if (shortcutFns.hasOwnProperty(i)) {
       shortcutFns[i](e);
     }
   }
+
+  return bubble(e);
+}
+
+
+/*
+ * Bubbles the event up the tree so multiple
+ * listeners can be triggered by events
+ *
+ * TODO: Research if this will ever hit a case other than
+ *   `document.body`. Potentially more performant to just bubble
+ *   straight to `body`
+ */
+function bubble(e: Event) : void {
+  skipPush = true;
+
+  if (e.target.nodeName === 'BODY') {
+    return;
+  }
+
+  const newEvent = document.createEvent('KeyboardEvent')
+  const {
+    key, code, location, ctrlKey, shiftKey,
+    altKey, metaKey, isComposing, charCode,
+    keyCode, which,
+  } = e;
+
+
+  const event: KeyboardEvent = new KeyboardEvent(
+    'keydown', {
+    key, code, location, ctrlKey, shiftKey,
+    altKey, metaKey, isComposing, charCode,
+    keyCode, which,
+  });
+
+  e.target.parentElement.dispatchEvent(event);
 }
 
 
@@ -55,6 +100,11 @@ function onKeyDown(e: Event) : void {
  */
 
 function onKeyUp(e: Event) : void {
+  skipPush = false;
+  if (globalPause()) {
+    return;
+  }
+
   const index: number = downKeys.indexOf(evaluateKey(e));
 
   if (index !== -1) {

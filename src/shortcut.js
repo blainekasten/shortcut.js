@@ -18,6 +18,7 @@ import mappings from './Mappings';
 import pausedMappings from './PausedMappings';
 import bindsTo from './BindsTo';
 import preventDefault from './PreventDefault';
+import stopPropagation from './StopPropagation';
 import pause from './Pause';
 import resume from './Resume';
 import unbind from './Unbind';
@@ -25,7 +26,8 @@ import trigger from './Trigger';
 import error from './Error';
 
 export default function shortcut(shortcutStr: string, domNode: HTMLElement) : object {
-  // TODO: Throw error if domNode is undefined
+
+  // Should we envify these?
   if (!domNode || domNode.ELEMENT_NODE !== 1) {
     return error(
       `You must pass a function as a second argument to 'shortcut(string, domNode)'. Check the definition of 'shortcut("${shortcutStr}", ${domNode})`
@@ -33,8 +35,9 @@ export default function shortcut(shortcutStr: string, domNode: HTMLElement) : ob
   }
 
   if (!shortcutStr || typeof shortcutStr !== 'string'){
-    // TODO: Throw invariant error
-    return {};
+    return error(
+      `You must pass a string as your first argument to 'shortcut(string, domNode)'. Check the definition of 'shortcut("${shortcutStr}", ${domNode})`
+    );
   }
 
   // check if element and keys exists in mappings
@@ -53,6 +56,7 @@ export default function shortcut(shortcutStr: string, domNode: HTMLElement) : ob
     keys: shortcutStr,
     pause,
     preventDefault,
+    stopPropagation,
     resume,
     trigger,
     unbind,
