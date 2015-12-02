@@ -14,7 +14,7 @@ import globalPause from './GlobalPause';
 import mappings from './Mappings';
 import shortcut from './Shortcut';
 
-let downKeys: Array<string> = [];
+const downKeys: Array<string> = [];
 
 /*
  * When a key is pressed, we add it to the internal array, and check if we have any matches to fire functions
@@ -38,8 +38,6 @@ function onKeyDown(e: Event) : void {
 
   // we have a match, time to react
   if (shortcutFns.length){
-    downKeys = [];
-
     if (shortcutInstance.isPaused){
       return;
     }

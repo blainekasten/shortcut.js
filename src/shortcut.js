@@ -22,10 +22,15 @@ import pause from './Pause';
 import resume from './Resume';
 import unbind from './Unbind';
 import trigger from './Trigger';
-
+import error from './Error';
 
 export default function shortcut(shortcutStr: string, domNode: HTMLElement) : object {
   // TODO: Throw error if domNode is undefined
+  if (!domNode || domNode.ELEMENT_NODE !== 1) {
+    return error(
+      `You must pass a function as a second argument to 'shortcut(string, domNode)'. Check the definition of 'shortcut("${shortcutStr}", ${domNode})`
+    );
+  }
 
   if (!shortcutStr || typeof shortcutStr !== 'string'){
     // TODO: Throw invariant error

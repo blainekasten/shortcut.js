@@ -1,6 +1,6 @@
 {
   "name": "shortcut.js",
-  "version": "2.0.0-rc2",
+  "version": "2.0.0-rc3",
   "main": "./dist/shortcut.js",
   "author": "Blaine Kasten <blainekasten@gmail.com>",
   "keywords": [

@@ -280,8 +280,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Trigger2 = _interopRequireDefault(_Trigger);
 
+	var _Error = __webpack_require__(8);
+
+	var _Error2 = _interopRequireDefault(_Error);
+
 	function shortcut(shortcutStr, domNode) {
 	  // TODO: Throw error if domNode is undefined
+	  if (!domNode || domNode.ELEMENT_NODE !== 1) {
+	    return (0, _Error2['default'])('You must pass a function as a second argument to \'shortcut(string, domNode)\'. Check the definition of \'shortcut("' + shortcutStr + '", ' + domNode + ')');
+	  }
 
 	  if (!shortcutStr || typeof shortcutStr !== 'string') {
 	    // TODO: Throw invariant error
@@ -745,8 +752,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // we have a match, time to react
 	  if (shortcutFns.length) {
-	    downKeys = [];
-
 	    if (shortcutInstance.isPaused) {
 	      return;
 	    }
