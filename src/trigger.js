@@ -14,24 +14,17 @@
  */
 
 import globalPause from './GlobalPause';
+import { callShortcutFunctions } from './EventBinding';
 
 export default function trigger() : object {
-  const shorcutFunctions: Array<Function> = this.functions();
-  const fakeEvent: Object = {
-    preventDefault: function(){},
-    target: this.domNode,
-  }; // TODO: Expand Synethetic Event
-
-
   if (globalPause() || this.isPaused){
     return this;
   }
 
-  for (const i: Function in shorcutFunctions){
-    if (shorcutFunctions.hasOwnProperty(i)) {
-      shorcutFunctions[i](fakeEvent);
-    }
-  }
+  const keys: Array<string> = this.keys.split(' ');
+  const event: KeyboardEvent = new KeyboardEvent('keydown', {});
+
+  callShortcutFunctions(this.keys, this.domNode, event);
 
   return this;
 }

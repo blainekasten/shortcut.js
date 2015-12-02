@@ -10,7 +10,11 @@
 
 <h3> SHORTCUT </h3>
 <label for='phone'>Phone field</label>
-<input id='phone' />
+<div>
+  <span>
+    <input id='phone' />
+  </span>
+</div>
 
 <p> This page has keyboard shortcuts via the shorcut library. </p>
 <p> It is instantiated by <pre><code>shortcut('mod a', DOMNode).bindsTo(function(){...});</code></pre>
@@ -27,7 +31,13 @@
     console.log('Congrats! You pressed shift 1 somewhere in the window.');
   };
 
+  var log = function(e) {
+    console.log('stopped propagation, congrats shouldnt appear');
+  }
+
   shortcut('mod a', document.getElementById('phone')).bindsTo(phonefn).preventDefault();
-  shortcut('shift 1', document.getElementById('phone')).bindsTo(windowfn);
-  shortcut('shift', document.body).bindsTo(windowfn);
+  shortcut('up', document.getElementById('phone')).stopPropagation().bindsTo(log);
+  shortcut('up', document.body).bindsTo(windowfn);
+
+  shortcut('up', document.getElementById('phone')).trigger();
 </script>

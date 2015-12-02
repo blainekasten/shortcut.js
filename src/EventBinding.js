@@ -19,34 +19,23 @@ const downKeys: Array<string> = [];
 /*
  * When a key is pressed, we add it to the internal array, and check if we have any matches to fire functions
  */
-function onKeyDown(e: Event) : void {
-  downKeys.push(evaluateKey(e));
-
-  const downKeyString: String = downKeys.join(' ');
-  const domNode: HTMLElement = e.target;
-
-  // Do nothing during globalPause, shortcut pause
-  // or if we do not have that mapping, return
-  if (globalPause() ||
-      mappings[downKeyString] === undefined
-     ){
+function onKeyDown(e: KeyboardEvent) : void {
+  if (globalPause()) {
     return;
   }
 
-  const shortcutInstance: Object = shortcut(downKeyString, domNode);
-  const shortcutFns: Array<Function> = shortcutInstance.functions();
+  downKeys.push(evaluateKey(e));
 
-  // we have a match, time to react
-  if (shortcutFns.length){
-    if (shortcutInstance.isPaused){
-      return;
-    }
+  const downKeyString: string = downKeys.join(' ');
+  const domNode: HTMLElement = e.target;
 
-    // Call functions
-    for (const i in shortcutFns){
-      shortcutFns[i](e);
-    }
+  // there is no shortcut bound for this set of
+  // keys pressed, so stop
+  if (mappings[downKeyString] === undefined){
+    return;
   }
+
+  callShortcutFunctions(downKeyString, domNode, e);
 }
 
 
@@ -55,12 +44,53 @@ function onKeyDown(e: Event) : void {
  */
 
 function onKeyUp(e: Event) : void {
+  if (globalPause()) {
+    return;
+  }
+
   const index: number = downKeys.indexOf(evaluateKey(e));
 
   if (index !== -1) {
     downKeys.splice(index, 1);
   }
 }
+
+
+/*
+ * calls the shortcut function and bubbles
+ * to the document.body
+ *
+ * until we hear of a case for needing to do proper bubbling, I think
+ * this should be efficient and sufficient.
+ */
+export function callShortcutFunctions(downKeyString: string, domNode: HTMLElement, e: KeyboardEvent) : void {
+  const shortcutInstance: Object = shortcut(downKeyString, domNode);
+
+  // shortcut is paused, so stop
+  if (shortcutInstance.isPaused) {
+    return;
+  }
+
+  const shortcutFns: Array<Function> = shortcutInstance.functions();
+  let allowPropagationToBody: boolean = true;
+
+  e.stopPropagation = function() {
+    allowPropagationToBody = false;
+  }
+
+  // Call functions
+  for (const i in shortcutFns){
+    if (shortcutFns.hasOwnProperty(i)) {
+      shortcutFns[i](e)
+    }
+  }
+
+  // only bubble to document.body
+  if (domNode !== document.body && allowPropagationToBody) {
+    callShortcutFunctions(downKeyString, document.body, e);
+  }
+}
+
 
 
 

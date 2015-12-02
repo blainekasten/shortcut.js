@@ -12,12 +12,15 @@ describe('shortcut.js', function(){
 
     $(document.body).append('<input id="phone"></input>');
 
+    this.phoneNode = document.querySelector('#phone');
+
     shortcut('a', document.body).bindsTo(testFn1).bindsTo(testFn2);
     shortcut('b', document.body).bindsTo(testFn1);
     shortcut('c', document.body).bindsTo(testFn2);
     shortcut('d', document.body).bindsTo(testFn2).preventDefault();
-    shortcut('e', document.querySelector('#phone')).bindsTo(phoneFn);
+    shortcut('e', this.phoneNode).bindsTo(phoneFn);
     shortcut('e', document.body).bindsTo(testFn1);
+    shortcut('f', this.phoneNode)//.stopPropagation();
   });
 
   afterEach(function(){
@@ -25,11 +28,10 @@ describe('shortcut.js', function(){
     shortcut('b', document.body).unbind();
     shortcut('c', document.body).unbind();
     shortcut('d', document.body).unbind();
-    shortcut('e', document.querySelector('#phone')).unbind();
+    shortcut('e', this.phoneNode).unbind();
     shortcut('e', document.body).unbind();
+    shortcut('f', this.phoneNode).unbind();
   });
-
-
 
 
   // Multple functions to one shortcut
@@ -46,12 +48,6 @@ describe('shortcut.js', function(){
   it('should not fire a shortcut bound to targets without a second paramter', function(){
     shortcut('e', document.body).trigger()
     expect(phoneFn).not.toHaveBeenCalled()
-  });
-
-  // element bindings
-  it('should not fire window functions when a second paramater is passed', function(){
-    shortcut('e', document.querySelector('#phone')).trigger()
-    expect(testFn1).not.toHaveBeenCalled()
   });
 
   // Global pause
@@ -147,6 +143,38 @@ describe('shortcut.js', function(){
     ).toThrow(
       new Error("You must pass a function to the bindsTo method, check the call for the shortcut('a', 'undefined') method")
     );
+  });
+
+  it('should prevent bubbling for stopPropagation', function() {
+    var bodyFn = jasmine.createSpy('bodyFn');
+    shortcut('f', this.phoneNode).bindsTo(function(e){ console.log(e); e.stopPropagation(); })
+    shortcut('f', document.body).bindsTo(bodyFn);
+
+    shortcut('f', this.phoneNode).trigger();
+
+    expect(bodyFn).not.toHaveBeenCalled();
+  });
+
+
+  it('should bubble to the body naturally', function() {
+    var bodyFn = jasmine.createSpy('bodyFn');
+    shortcut('g', this.phoneNode).bindsTo(function(){});
+    shortcut('g', document.body).bindsTo(bodyFn);
+
+    shortcut('g', this.phoneNode).trigger();
+
+    expect(bodyFn).toHaveBeenCalled();
+  });
+
+
+  it('should prevent bubbling for with sugar stopPropagation method', function() {
+    var bodyFn = jasmine.createSpy('bodyFn');
+    shortcut('h', this.phoneNode).stopPropagation();
+    shortcut('h', document.body).bindsTo(bodyFn);
+
+    shortcut('h', this.phoneNode).trigger();
+
+    expect(bodyFn).not.toHaveBeenCalled();
   });
 
 });
