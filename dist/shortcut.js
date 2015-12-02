@@ -85,7 +85,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Shortcut2 = _interopRequireDefault(_Shortcut);
 
-	var _EventBinding = __webpack_require__(14);
+	var _EventBinding = __webpack_require__(53);
 
 	var _EventBinding2 = _interopRequireDefault(_EventBinding);
 
@@ -264,19 +264,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _PreventDefault2 = _interopRequireDefault(_PreventDefault);
 
-	var _Pause = __webpack_require__(10);
+	var _StopPropagation = __webpack_require__(10);
+
+	var _StopPropagation2 = _interopRequireDefault(_StopPropagation);
+
+	var _Pause = __webpack_require__(11);
 
 	var _Pause2 = _interopRequireDefault(_Pause);
 
-	var _Resume = __webpack_require__(11);
+	var _Resume = __webpack_require__(12);
 
 	var _Resume2 = _interopRequireDefault(_Resume);
 
-	var _Unbind = __webpack_require__(12);
+	var _Unbind = __webpack_require__(13);
 
 	var _Unbind2 = _interopRequireDefault(_Unbind);
 
-	var _Trigger = __webpack_require__(13);
+	var _Trigger = __webpack_require__(14);
 
 	var _Trigger2 = _interopRequireDefault(_Trigger);
 
@@ -285,14 +289,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _Error2 = _interopRequireDefault(_Error);
 
 	function shortcut(shortcutStr, domNode) {
-	  // TODO: Throw error if domNode is undefined
+
+	  // Should we envify these?
 	  if (!domNode || domNode.ELEMENT_NODE !== 1) {
 	    return (0, _Error2['default'])('You must pass a function as a second argument to \'shortcut(string, domNode)\'. Check the definition of \'shortcut("' + shortcutStr + '", ' + domNode + ')');
 	  }
 
 	  if (!shortcutStr || typeof shortcutStr !== 'string') {
-	    // TODO: Throw invariant error
-	    return {};
+	    return (0, _Error2['default'])('You must pass a string as your first argument to \'shortcut(string, domNode)\'. Check the definition of \'shortcut("' + shortcutStr + '", ' + domNode + ')');
 	  }
 
 	  // check if element and keys exists in mappings
@@ -317,6 +321,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    keys: shortcutStr,
 	    pause: _Pause2['default'],
 	    preventDefault: _PreventDefault2['default'],
+	    stopPropagation: _StopPropagation2['default'],
 	    resume: _Resume2['default'],
 	    trigger: _Trigger2['default'],
 	    unbind: _Unbind2['default']
@@ -510,6 +515,46 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 10 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2015-2016, Blaine Kasten
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * Makes a key binding preventDefault
+	 * @chainable
+	 *
+	 * @providesModule PreventDefault
+	 */
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports["default"] = stopPropagation;
+
+	function stopPropagation() {
+	  function _stopPropagation(e) {
+	    if (e.stopPropagation) {
+	      e.stopPropagation();
+	    }
+	    return false; // Safari Prevent Default
+	  };
+
+	  this.bindsTo(_stopPropagation);
+
+	  return this;
+	}
+
+	module.exports = exports["default"];
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -553,7 +598,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -598,7 +643,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -637,7 +682,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -668,22 +713,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _GlobalPause2 = _interopRequireDefault(_GlobalPause);
 
-	function trigger() {
-	  var shorcutFunctions = this.functions();
-	  var fakeEvent = {
-	    preventDefault: function preventDefault() {},
-	    target: this.domNode
-	  }; // TODO: Expand Synethetic Event
+	var _EventBinding = __webpack_require__(53);
 
+	function trigger() {
 	  if ((0, _GlobalPause2['default'])() || this.isPaused) {
 	    return this;
 	  }
 
-	  for (var i in shorcutFunctions) {
-	    if (shorcutFunctions.hasOwnProperty(i)) {
-	      shorcutFunctions[i](fakeEvent);
-	    }
-	  }
+	  var keys = this.keys.split(' ');
+	  var event = new KeyboardEvent('keydown', {});
+
+	  (0, _EventBinding.callShortcutFunctions)(this.keys, this.domNode, event);
 
 	  return this;
 	}
@@ -691,7 +731,62 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 14 */
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */
+/***/ function(module, exports) {
+
+	var $Object = Object;
+	module.exports = {
+	  create:     $Object.create,
+	  getProto:   $Object.getPrototypeOf,
+	  isEnum:     {}.propertyIsEnumerable,
+	  getDesc:    $Object.getOwnPropertyDescriptor,
+	  setDesc:    $Object.defineProperty,
+	  setDescs:   $Object.defineProperties,
+	  getKeys:    $Object.keys,
+	  getNames:   $Object.getOwnPropertyNames,
+	  getSymbols: $Object.getOwnPropertySymbols,
+	  each:       [].forEach
+	};
+
+/***/ },
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -712,9 +807,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
+	exports.callShortcutFunctions = callShortcutFunctions;
 	exports['default'] = eventBinding;
 
-	var _EvaluateKey = __webpack_require__(15);
+	var _EvaluateKey = __webpack_require__(54);
 
 	var _EvaluateKey2 = _interopRequireDefault(_EvaluateKey);
 
@@ -736,31 +832,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * When a key is pressed, we add it to the internal array, and check if we have any matches to fire functions
 	 */
 	function onKeyDown(e) {
+	  if ((0, _GlobalPause2['default'])()) {
+	    return;
+	  }
+
 	  downKeys.push((0, _EvaluateKey2['default'])(e));
 
 	  var downKeyString = downKeys.join(' ');
 	  var domNode = e.target;
 
-	  // Do nothing during globalPause, shortcut pause
-	  // or if we do not have that mapping, return
-	  if ((0, _GlobalPause2['default'])() || _Mappings2['default'][downKeyString] === undefined) {
+	  // there is no shortcut bound for this set of
+	  // keys pressed, so stop
+	  if (_Mappings2['default'][downKeyString] === undefined) {
 	    return;
 	  }
 
-	  var shortcutInstance = (0, _Shortcut2['default'])(downKeyString, domNode);
-	  var shortcutFns = shortcutInstance.functions();
-
-	  // we have a match, time to react
-	  if (shortcutFns.length) {
-	    if (shortcutInstance.isPaused) {
-	      return;
-	    }
-
-	    // Call functions
-	    for (var i in shortcutFns) {
-	      shortcutFns[i](e);
-	    }
-	  }
+	  callShortcutFunctions(downKeyString, domNode, e);
 	}
 
 	/*
@@ -768,10 +855,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	function onKeyUp(e) {
+	  if ((0, _GlobalPause2['default'])()) {
+	    return;
+	  }
+
 	  var index = downKeys.indexOf((0, _EvaluateKey2['default'])(e));
 
 	  if (index !== -1) {
 	    downKeys.splice(index, 1);
+	  }
+	}
+
+	/*
+	 * calls the shortcut function and bubbles
+	 * to the document.body
+	 *
+	 * until we hear of a case for needing to do proper bubbling, I think
+	 * this should be efficient and sufficient.
+	 */
+
+	function callShortcutFunctions(downKeyString, domNode, e) {
+	  var shortcutInstance = (0, _Shortcut2['default'])(downKeyString, domNode);
+
+	  // shortcut is paused, so stop
+	  if (shortcutInstance.isPaused) {
+	    return;
+	  }
+
+	  var shortcutFns = shortcutInstance.functions();
+	  var allowPropagationToBody = true;
+
+	  e.stopPropagation = function () {
+	    allowPropagationToBody = false;
+	  };
+
+	  // Call functions
+	  for (var i in shortcutFns) {
+	    if (shortcutFns.hasOwnProperty(i)) {
+	      shortcutFns[i](e);
+	    }
+	  }
+
+	  // only bubble to document.body
+	  if (domNode !== document.body && allowPropagationToBody) {
+	    callShortcutFunctions(downKeyString, document.body, e);
 	  }
 	}
 
@@ -796,10 +923,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
-	module.exports = exports['default'];
-
 /***/ },
-/* 15 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -817,7 +942,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _defineProperty = __webpack_require__(16)['default'];
+	var _defineProperty = __webpack_require__(55)['default'];
 
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
@@ -906,12 +1031,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 16 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var _Object$defineProperty = __webpack_require__(17)["default"];
+	var _Object$defineProperty = __webpack_require__(56)["default"];
 
 	exports["default"] = function (obj, key, value) {
 	  if (key in obj) {
@@ -931,36 +1056,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.__esModule = true;
 
 /***/ },
-/* 17 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(18), __esModule: true };
+	module.exports = { "default": __webpack_require__(57), __esModule: true };
 
 /***/ },
-/* 18 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(19);
+	var $ = __webpack_require__(35);
 	module.exports = function defineProperty(it, key, desc){
 	  return $.setDesc(it, key, desc);
-	};
-
-/***/ },
-/* 19 */
-/***/ function(module, exports) {
-
-	var $Object = Object;
-	module.exports = {
-	  create:     $Object.create,
-	  getProto:   $Object.getPrototypeOf,
-	  isEnum:     {}.propertyIsEnumerable,
-	  getDesc:    $Object.getOwnPropertyDescriptor,
-	  setDesc:    $Object.defineProperty,
-	  setDescs:   $Object.defineProperties,
-	  getKeys:    $Object.keys,
-	  getNames:   $Object.getOwnPropertyNames,
-	  getSymbols: $Object.getOwnPropertySymbols,
-	  each:       [].forEach
 	};
 
 /***/ }
