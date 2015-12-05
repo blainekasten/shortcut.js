@@ -37,7 +37,7 @@ shortcut('mod =', document.querySelector('input#uppercase'))
   .bindsTo(validateInput);
 ```
 
-Here, when a user presses the the modifier key with the equals key, we run an uppercaseInput function, and then a validateInput function.
+Here, when a user presses the the modifier key with the equals key, we run an uppercaseInput function, and then a `validateInput` function.
 
 API
 ============
@@ -55,7 +55,9 @@ This function globally pauses all shortcut function dispatching. Keyboard shortc
 
 Useage:
 
-    shortcut.pause();
+```js
+shortcut.pause();
+```
  
 #### +resume()
 
@@ -63,8 +65,9 @@ This function globally resumes all shortcut function dispatching. Keyboard short
 
 Useage:
 
-    shortcut.resume();
-
+```js
+shortcut.resume();
+```
 
 #### -bindsTo(fn: Function)
 
@@ -72,14 +75,26 @@ Useage:
 
 #### -preventDefault()
 
-A function that prevents default on the current shortcut.
+A function that prevents default on the current shortcut. The normal `event.preventDefault()` is also respected.
 Usage:
 
 ```js
-shortcut('meta a', input).bindsTo(uppercaseInput).preventDefault()
+shortcut('meta a', input).bindsTo(uppercaseInput).preventDefault();
 ```
 
-This usage would cause cmd + a to not hightlight the input, but rather call the uppercaseInput functions.
+This usage would cause cmd + a to not hightlight the input, but rather call the `uppercaseInput` functions.
+
+#### -stopPropagation()
+
+A function that prevents bubbling on the current node to the `document.body`. The normal `event.stopPropagation()` is also respected.
+Usage:
+
+```js
+shortcut('meta a', input).bindsTo(uppercaseInput).stopPropagation();
+shortcut('meta a', document.body).bindsTo(grabText);
+```
+
+This usage would cause cmd + a call the `uppercaseInput` function, but not the `grabText` function.
 
 #### -trigger()
 
