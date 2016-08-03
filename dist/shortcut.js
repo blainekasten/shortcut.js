@@ -303,8 +303,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (_Mappings2['default'][shortcutStr] === undefined) {
 	    _Mappings2['default'][shortcutStr] = {};
 	  }
+
 	  if (_Mappings2['default'][shortcutStr][domNode] === undefined) {
-	    _Mappings2['default'][shortcutStr][domNode] = [];
+	    _Mappings2['default'][shortcutStr][domNode] = { keyDown: [], keyUp: [] };
 	  }
 
 	  // decides if the shortcut is paused
@@ -312,13 +313,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // Chaining methods
 	  return {
-	    bindsTo: _BindsTo2['default'],
+	    bindsTo: _BindsTo2['default'].bind(null, 'keyUp'),
 	    domNode: domNode,
 	    functions: function functions() {
 	      return _Mappings2['default'][shortcutStr][domNode];
 	    },
 	    isPaused: isPaused,
 	    keys: shortcutStr,
+	    onKeyDown: _BindsTo2['default'].bind(null, 'keyDown'),
 	    pause: _Pause2['default'],
 	    preventDefault: _PreventDefault2['default'],
 	    stopPropagation: _StopPropagation2['default'],
@@ -428,13 +430,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Error2 = _interopRequireDefault(_Error);
 
-	function bindsTo(fn) {
+	function bindsTo(location, fn) {
 	  // Stop if not a function
 	  if (typeof fn !== 'function') {
 	    return (0, _Error2['default'])('You must pass a function to the bindsTo method, check the call for the shortcut(\'' + this.keys + '\', \'' + this.domNode.name + '\') method');
 	  }
 
-	  _Mappings2['default'][this.keys][this.domNode].push(fn);
+	  _Mappings2['default'][this.keys][this.domNode][location].push(fn);
 
 	  // Return this for chaning
 	  return this;

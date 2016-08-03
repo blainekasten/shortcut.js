@@ -14,7 +14,8 @@ import globalPause from './GlobalPause';
 import mappings from './Mappings';
 import shortcut from './Shortcut';
 
-const downKeys: Array<string> = [];
+let downKeys: Array<string> = [];
+let clearDownKeysTimeout;
 
 /*
  * When a key is pressed, we add it to the internal array, and check if we have any matches to fire functions
@@ -26,12 +27,17 @@ function onKeyDown(e: KeyboardEvent) : void {
 
   downKeys.push(evaluateKey(e));
 
+  clearTimeout(clearDownKeysTimeout);
+  clearDownKeysTimeout = setTimeout(function clearKeys() {
+    downKeys = [];
+  }, 500);
+
   const downKeyString: string = downKeys.join(' ');
   const domNode: HTMLElement = e.target;
 
   // there is no shortcut bound for this set of
   // keys pressed, so stop
-  if (mappings[downKeyString] === undefined){
+  if (mappings[downKeyString] === undefined) {
     return;
   }
 
@@ -74,14 +80,14 @@ export function callShortcutFunctions(downKeyString: string, domNode: HTMLElemen
   const shortcutFns: Array<Function> = shortcutInstance.functions();
   let allowPropagationToBody: boolean = true;
 
-  e.stopPropagation = function() {
+  e.stopPropagation = function propagationStopper() {
     allowPropagationToBody = false;
-  }
+  };
 
   // Call functions
-  for (const i in shortcutFns){
+  for (const i in shortcutFns) {
     if (shortcutFns.hasOwnProperty(i)) {
-      shortcutFns[i](e)
+      shortcutFns[i](e);
     }
   }
 
@@ -90,8 +96,6 @@ export function callShortcutFunctions(downKeyString: string, domNode: HTMLElemen
     callShortcutFunctions(downKeyString, document.body, e);
   }
 }
-
-
 
 
 /*
@@ -105,7 +109,7 @@ export default function eventBinding() : void {
   }
 
   if ( !/Mobi/.test(navigator.userAgent)) {
-    if (window.addEventListener){
+    if (window.addEventListener) {
       window.addEventListener('keydown', onKeyDown);
       window.addEventListener('keyup', onKeyUp);
     } else {
@@ -113,5 +117,4 @@ export default function eventBinding() : void {
       document.attachEvent('onkeyup', onKeyUp);
     }
   }
-
 }

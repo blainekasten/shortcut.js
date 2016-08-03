@@ -41,19 +41,25 @@ export default function shortcut(shortcutStr: string, domNode: HTMLElement) : ob
   }
 
   // check if element and keys exists in mappings
-  if (mappings[shortcutStr] === undefined){ mappings[shortcutStr] = {}; }
-  if (mappings[shortcutStr][domNode] === undefined){ mappings[shortcutStr][domNode] = []; }
+  if (mappings[shortcutStr] === undefined){
+    mappings[shortcutStr] = {};
+  }
+
+  if (mappings[shortcutStr][domNode] === undefined) {
+    mappings[shortcutStr][domNode] = { keyDown: [], keyUp: [] };
+  }
 
   // decides if the shortcut is paused
   const isPaused: boolean = pausedMappings[shortcutStr] === domNode ? true : false;
 
   // Chaining methods
   return {
-    bindsTo,
+    bindsTo: bindsTo.bind(null, 'keyUp'),
     domNode,
     functions: () => mappings[shortcutStr][domNode],
     isPaused,
     keys: shortcutStr,
+    onKeyDown: bindsTo.bind(null, 'keyDown'),
     pause,
     preventDefault,
     stopPropagation,

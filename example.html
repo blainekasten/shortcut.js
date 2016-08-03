@@ -39,5 +39,8 @@
   shortcut('up', document.getElementById('phone')).stopPropagation().bindsTo(log);
   shortcut('up', document.body).bindsTo(windowfn);
 
+  shortcut('tab', document.body).preventDefault().bindsTo(function(){ console.log('tab')});
+  shortcut('shift tab', document.body).preventDefault().bindsTo(function(){ console.log('shift tab')});
+
   shortcut('up', document.getElementById('phone')).trigger();
 </script>

@@ -10,7 +10,7 @@
  */
 
 export default function indexOfPolyfill() : void {
-  if (!Array.prototype.indexOf){
+  if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function indexOf(element) {
       const length = this.length >>> 0;
 
@@ -31,4 +31,4 @@ export default function indexOfPolyfill() : void {
       return -1;
     };
   }
-};
+}

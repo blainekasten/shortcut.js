@@ -9,12 +9,12 @@
  * @providesModule shortcut
  */
 
-import indexofPolyfill from './IndexOfPolyfill';
+import indexOfPolyfill from './IndexOfPolyfill';
 import globalPause from './GlobalPause';
 import shortcut from './Shortcut';
 import eventBinding from './EventBinding';
 
-indexofPolyfill();
+indexOfPolyfill();
 eventBinding();
 
 /*
@@ -24,7 +24,7 @@ eventBinding();
  * @chainable
  */
 
-shortcut.pause = function pause() : object {
+shortcut.pause = function pause() : Object {
   globalPause(true);
 
   return shortcut;
@@ -37,7 +37,7 @@ shortcut.pause = function pause() : object {
  * @chainable
  */
 
-shortcut.resume = function resume() : object {
+shortcut.resume = function resume() : Object {
   globalPause(false);
 
   return shortcut;
