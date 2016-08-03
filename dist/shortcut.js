@@ -180,7 +180,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
-	;
 	module.exports = exports["default"];
 
 /***/ },
@@ -506,7 +505,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    e.returnValue = false; // IE prevent Default
 	    return false; // Safari Prevent Default
-	  };
+	  }
 
 	  this.bindsTo(_preventDefault);
 
@@ -546,7 +545,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      e.stopPropagation();
 	    }
 	    return false; // Safari Prevent Default
-	  };
+	  }
 
 	  this.bindsTo(_stopPropagation);
 
@@ -722,7 +721,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this;
 	  }
 
-	  var keys = this.keys.split(' ');
 	  var event = new KeyboardEvent('keydown', {});
 
 	  (0, _EventBinding.callShortcutFunctions)(this.keys, this.domNode, event);
@@ -774,6 +772,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _Shortcut2 = _interopRequireDefault(_Shortcut);
 
 	var downKeys = [];
+	var clearDownKeysTimeout = undefined;
 
 	/*
 	 * When a key is pressed, we add it to the internal array, and check if we have any matches to fire functions
@@ -784,6 +783,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  downKeys.push((0, _EvaluateKey2['default'])(e));
+
+	  clearTimeout(clearDownKeysTimeout);
+	  clearDownKeysTimeout = setTimeout(function clearKeys() {
+	    downKeys = [];
+	  }, 500);
 
 	  var downKeyString = downKeys.join(' ');
 	  var domNode = e.target;
@@ -832,7 +836,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var shortcutFns = shortcutInstance.functions();
 	  var allowPropagationToBody = true;
 
-	  e.stopPropagation = function () {
+	  e.stopPropagation = function propagationStopper() {
 	    allowPropagationToBody = false;
 	  };
 
@@ -899,20 +903,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	function evaluateKey(e) {
 	  var OS_MAP = _defineProperty({}, osModKeyName(), 'mod');
 
-	  // grap character for special cases
+	  // grab character for special cases
 	  var character = specialCases(e.keyCode);
 
 	  if (OS_MAP[character]) {
-	    // grap character for special cases
+	    // grab character for special cases
 	    character = OS_MAP[character];
-	  }
-
-	  /*
-	   * if the character doesnt match a special case
-	   * we just can trust the charCode lookup method
-	   */
-	  if (!character) {
-	    character = String.fromCharCode(e.keyCode || e.charCode).toLowerCase();
 	  }
 
 	  return character;
@@ -965,6 +961,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      break;
 	    case 13:
 	      character = 'rtn';
+	      break;
+	    default:
+	      /*
+	       * if the character doesnt match a special case
+	       * we just can trust the charCode lookup method
+	       */
+	      character = String.fromCharCode(e.keyCode || e.charCode).toLowerCase();
 	      break;
 	  }
 
