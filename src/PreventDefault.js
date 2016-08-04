@@ -13,14 +13,14 @@
  */
 
 export default function preventDefault() : object {
-  function _preventDefault(e){
-    if (e.preventDefault){
+  function _preventDefault(e:Event) {
+    if (e.preventDefault) {
       e.preventDefault();
     }
 
     e.returnValue = false; // IE prevent Default
     return false; // Safari Prevent Default
-  };
+  }
 
   this.bindsTo(_preventDefault);
 

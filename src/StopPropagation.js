@@ -13,12 +13,12 @@
  */
 
 export default function stopPropagation() : object {
-  function _stopPropagation(e){
-    if (e.stopPropagation){
+  function _stopPropagation(e) {
+    if (e.stopPropagation) {
       e.stopPropagation();
     }
     return false; // Safari Prevent Default
-  };
+  }
 
   this.bindsTo(_stopPropagation);
 

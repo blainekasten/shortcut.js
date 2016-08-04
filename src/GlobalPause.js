@@ -12,9 +12,9 @@
  * @providesModule Error
  */
 
-let globalPause: boolean = false;
+let globalPause:boolean = false;
 
-export default function globalPause(setter: boolean) : boolean {
+export default function globalPause(setter:boolean) : boolean {
   if (typeof setter === 'boolean') {
     globalPause = setter;
   }
