@@ -11,6 +11,6 @@
  * @providesModule Error
  */
 
-export default function(msg: string) {
+export default function(msg:string) {
   throw new Error(msg);
 }

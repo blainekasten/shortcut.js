@@ -16,13 +16,12 @@
 import globalPause from './GlobalPause';
 import { callShortcutFunctions } from './EventBinding';
 
-export default function trigger() : object {
-  if (globalPause() || this.isPaused){
+export default function trigger() : Object {
+  if (globalPause() || this.isPaused) {
     return this;
   }
 
-  const keys: Array<string> = this.keys.split(' ');
-  const event: KeyboardEvent = new KeyboardEvent('keydown', {});
+  const event:KeyboardEvent = new KeyboardEvent('keydown', {});
 
   callShortcutFunctions(this.keys, this.domNode, event);
 

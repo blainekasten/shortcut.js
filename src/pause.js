@@ -15,7 +15,7 @@ import pausedMappings from './PausedMappings';
 
 export default function pause() : Object {
   // check if element and keys exists in mappings
-  if (pausedMappings[this.keys] === undefined){
+  if (pausedMappings[this.keys] === undefined) {
     pausedMappings[this.keys] = this.domNode;
   }
 

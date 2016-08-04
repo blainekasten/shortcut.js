@@ -159,6 +159,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function indexOfPolyfill() {
 	  if (!Array.prototype.indexOf) {
 	    Array.prototype.indexOf = function indexOf(element) {
+	      // eslint-disable-line
 	      var length = this.length >>> 0;
 
 	      var from = Number(arguments[1]) || 0;
@@ -180,7 +181,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
-	;
 	module.exports = exports["default"];
 
 /***/ },
@@ -289,7 +289,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _Error2 = _interopRequireDefault(_Error);
 
 	function shortcut(shortcutStr, domNode) {
-
 	  // Should we envify these?
 	  if (!domNode || domNode.ELEMENT_NODE !== 1) {
 	    return (0, _Error2['default'])('You must pass a function as a second argument to \'shortcut(string, domNode)\'. Check the definition of \'shortcut("' + shortcutStr + '", ' + domNode + ')');
@@ -303,6 +302,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (_Mappings2['default'][shortcutStr] === undefined) {
 	    _Mappings2['default'][shortcutStr] = {};
 	  }
+
 	  if (_Mappings2['default'][shortcutStr][domNode] === undefined) {
 	    _Mappings2['default'][shortcutStr][domNode] = [];
 	  }
@@ -504,7 +504,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    e.returnValue = false; // IE prevent Default
 	    return false; // Safari Prevent Default
-	  };
+	  }
 
 	  this.bindsTo(_preventDefault);
 
@@ -544,7 +544,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      e.stopPropagation();
 	    }
 	    return false; // Safari Prevent Default
-	  };
+	  }
 
 	  this.bindsTo(_stopPropagation);
 
@@ -629,7 +629,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _PausedMappings2 = _interopRequireDefault(_PausedMappings);
 
 	function resume() {
-
 	  // destroy key/value of this.keys
 	  if (_PausedMappings2['default'][this.keys]) {
 	    delete _PausedMappings2['default'][this.keys];
@@ -720,7 +719,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this;
 	  }
 
-	  var keys = this.keys.split(' ');
 	  var event = new KeyboardEvent('keydown', {});
 
 	  (0, _EventBinding.callShortcutFunctions)(this.keys, this.domNode, event);
@@ -772,6 +770,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _Shortcut2 = _interopRequireDefault(_Shortcut);
 
 	var downKeys = [];
+	var clearDownKeysTimeout = undefined;
 
 	/*
 	 * When a key is pressed, we add it to the internal array, and check if we have any matches to fire functions
@@ -782,6 +781,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  downKeys.push((0, _EvaluateKey2['default'])(e));
+
+	  clearTimeout(clearDownKeysTimeout);
+	  clearDownKeysTimeout = setTimeout(function clearKeys() {
+	    downKeys = [];
+	  }, 500);
 
 	  var downKeyString = downKeys.join(' ');
 	  var domNode = e.target;
@@ -830,7 +834,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var shortcutFns = shortcutInstance.functions();
 	  var allowPropagationToBody = true;
 
-	  e.stopPropagation = function () {
+	  e.stopPropagation = function propagationStopper() {
 	    allowPropagationToBody = false;
 	  };
 
@@ -898,19 +902,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var OS_MAP = _defineProperty({}, osModKeyName(), 'mod');
 
 	  // grap character for special cases
-	  var character = specialCases(e.keyCode);
+	  var character = specialCases(e);
 
 	  if (OS_MAP[character]) {
 	    // grap character for special cases
 	    character = OS_MAP[character];
-	  }
-
-	  /*
-	   * if the character doesnt match a special case
-	   * we just can trust the charCode lookup method
-	   */
-	  if (!character) {
-	    character = String.fromCharCode(e.keyCode || e.charCode).toLowerCase();
 	  }
 
 	  return character;
@@ -920,7 +916,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * this maps to readable words that can be used for the shortcut
 	 * library
 	 */
-	function specialCases(keyCode) {
+	function specialCases(_ref) {
+	  var keyCode = _ref.keyCode;
+	  var charCode = _ref.charCode;
+
 	  var character = undefined;
 
 	  switch (keyCode) {
@@ -963,6 +962,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      break;
 	    case 13:
 	      character = 'rtn';
+	      break;
+	    default:
+	      /*
+	       * if the character doesnt match a special case
+	       * we just can trust the charCode lookup method
+	       */
+	      character = String.fromCharCode(keyCode || charCode).toLowerCase();
 	      break;
 	  }
 

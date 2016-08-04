@@ -25,8 +25,7 @@ import unbind from './Unbind';
 import trigger from './Trigger';
 import error from './Error';
 
-export default function shortcut(shortcutStr: string, domNode: HTMLElement) : object {
-
+export default function shortcut(shortcutStr:string, domNode:HTMLElement) : Object {
   // Should we envify these?
   if (!domNode || domNode.ELEMENT_NODE !== 1) {
     return error(
@@ -34,15 +33,20 @@ export default function shortcut(shortcutStr: string, domNode: HTMLElement) : ob
     );
   }
 
-  if (!shortcutStr || typeof shortcutStr !== 'string'){
+  if (!shortcutStr || typeof shortcutStr !== 'string') {
     return error(
       `You must pass a string as your first argument to 'shortcut(string, domNode)'. Check the definition of 'shortcut("${shortcutStr}", ${domNode})`
     );
   }
 
   // check if element and keys exists in mappings
-  if (mappings[shortcutStr] === undefined){ mappings[shortcutStr] = {}; }
-  if (mappings[shortcutStr][domNode] === undefined){ mappings[shortcutStr][domNode] = []; }
+  if (mappings[shortcutStr] === undefined) {
+    mappings[shortcutStr] = {};
+  }
+
+  if (mappings[shortcutStr][domNode] === undefined) {
+    mappings[shortcutStr][domNode] = [];
+  }
 
   // decides if the shortcut is paused
   const isPaused: boolean = pausedMappings[shortcutStr] === domNode ? true : false;

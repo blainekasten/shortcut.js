@@ -10,8 +10,8 @@
  */
 
 export default function indexOfPolyfill() : void {
-  if (!Array.prototype.indexOf){
-    Array.prototype.indexOf = function indexOf(element) {
+  if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function indexOf(element) { // eslint-disable-line
       const length = this.length >>> 0;
 
       let from = Number(arguments[1]) || 0;
@@ -31,4 +31,4 @@ export default function indexOfPolyfill() : void {
       return -1;
     };
   }
-};
+}

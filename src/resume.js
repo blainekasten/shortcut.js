@@ -14,10 +14,9 @@
 
 import pausedMappings from './PausedMappings';
 
-export default function resume() : object {
-
+export default function resume() : Object {
   // destroy key/value of this.keys
-  if (pausedMappings[this.keys]){
+  if (pausedMappings[this.keys]) {
     delete pausedMappings[this.keys];
   }
 
